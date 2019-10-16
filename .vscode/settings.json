@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"quickjs.h": "c",
+		"cutils.h": "c"
+	}
+}
