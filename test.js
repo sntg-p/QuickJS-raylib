@@ -1,5 +1,5 @@
-import * as rlCore from './qjs-raylib/qjs-raylib.core.js';
-import * as rlTextures from './qjs-raylib/qjs-raylib.textures.js';
+import * as rlCore from './qjs-raylib/core.js';
+import * as rlTextures from './qjs-raylib/textures.js';
 
 const screenWidth = 800;
 const screenHeight = 450;

@@ -1,4 +1,4 @@
-import * as rlTextures from './qjs-raylib.textures';
+import * as rlTextures from './textures';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);

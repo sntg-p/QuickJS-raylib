@@ -1,6 +1,6 @@
 // @ts-ignore
 import * as rl from './qjs-raylib.so';
-import * as rlTextures from './qjs-raylib.textures.js';
+import * as rlTextures from './textures.js';
 
 // Window-related functions
 export const initWindow = rl.initWindow;
