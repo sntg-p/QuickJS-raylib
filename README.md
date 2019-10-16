@@ -2,7 +2,7 @@
 [QuickJS](https://github.com/ldarren/QuickJS "QuickJS repo") is a small and embeddable Javascript engine. It can compile Javascript sources to executables with no external dependencies, and supports native modules using the QuickJS C API.
 [raylib](https://github.com/raysan5/raylib "raylib repo") is a simple and easy-to-use library to enjoy videogames programming.
 
-This project consists in a module for QuickJS that enables you to use raylib from JavaScript, and to run your game with native performance.
+This project consists in a module for QuickJS that enables you to use raylib from JavaScript and run your game with native performance.
 
 ## Disclaimer
 - The idea is to make this user friendly. However, this takes time.
@@ -12,6 +12,7 @@ This project consists in a module for QuickJS that enables you to use raylib fro
 	- KDE neon 5.17
 	- Intel i7-6700
 	- GTX 1070
+- **Currently working on the core raylib module**.
 
 ## Requirements
 - Visual Studio Code (not really necessary if you read the .vscode/tasks.json and know a bit/are willing to learn about C compilers)
