@@ -2,7 +2,7 @@
 [QuickJS](https://github.com/ldarren/QuickJS "QuickJS repo") is a small and embeddable Javascript engine. It can compile Javascript sources to executables with no external dependencies, and supports native modules using the QuickJS C API.
 [raylib](https://github.com/raysan5/raylib "raylib repo") is a simple and easy-to-use library to enjoy videogames programming.
 
-This project consists in a module for QuickJS that enables you to use raylib from JavaScript and run your game with native performance.
+**QuickJS + raylib** consists in a module for QuickJS that enables you to use raylib from JavaScript and run your game with native performance.
 
 ## Disclaimer
 - The idea is to make this user friendly. However, this takes time.
@@ -16,15 +16,16 @@ This project consists in a module for QuickJS that enables you to use raylib fro
 
 ## Requirements
 - Visual Studio Code (not really necessary if you read the .vscode/tasks.json and know a bit/are willing to learn about C compilers)
-- raylib
-- QuickJS
+- raylib (download Linux binaries and copy them to `/usr/local/lib/raylib/`)
+- QuickJS (instructions in repo, but I just compiled it and copied the binaries to `/usr/local/bin`)
 - gcc (probably works with another C compilers)
 - Patience, as this is a wip and I'm probably missing lots of things
 
 ## Installation
-With Visual Studio Code installed:
-1. Install QuickJS and raylib.
-2. Clone this repo.
-3. Open cloned repo in VS Code.
-4. Run the ```build lib``` task.
-5. Run the ```start``` task.
+In Linux and with Visual Studio Code installed:
+1. Install QuickJS.
+1. Install raylib.
+1. Clone this repo.
+1. Open cloned repo in VS Code.
+1. Run the `build lib` task.
+1. Run the `start` task.
