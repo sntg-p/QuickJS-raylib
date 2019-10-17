@@ -122,21 +122,23 @@ export class Font
 	chars: CharInfo;
 }
 
-export interface Camera
+export class Camera3D
 {
 	position: Vector3;
 	target: Vector3;
 	up: Vector3;
 	fov: number;
 	type: number;
+	constructor(position: Vector3, target: Vector3, up: Vector3, fov: number, type: number);
 }
 
-export interface Camera2D
+export class Camera2D
 {
 	offset: Vector2;
 	target: Vector2;
 	rotation: number;
 	zoom: number;
+	constructor(offset: Vector2, target: Vector2, rotation: number, zoom: number);
 }
 
 export class Mesh
