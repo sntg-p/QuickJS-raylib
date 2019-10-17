@@ -1,4 +1,4 @@
-import * as rlTextures from './textures';
+import * as rlTextures from './textures.js';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);

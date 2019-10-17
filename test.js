@@ -1,3 +1,4 @@
+import * as rl from './qjs-raylib/qjs-raylib.so';
 import * as rlCore from './qjs-raylib/core.js';
 import * as rlTextures from './qjs-raylib/textures.js';
 
@@ -13,6 +14,9 @@ let textSize = 20;
 
 let image = rlTextures.loadImage('grass_colored.png');
 rlCore.setWindowIcon(image);
+
+let asd = new rl.Vector2(44, 33);
+console.log(`${asd.x} ${asd.y}`)
 
 while (!rlCore.windowShouldClose()) {
 	rlCore.beginDrawing();

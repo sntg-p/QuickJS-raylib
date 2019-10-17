@@ -5,6 +5,8 @@
 #include "quickjs/cutils.h"
 #include "raylib/raylib.h"
 
+#include "structs.h"
+
 /**
  * module: core
  */
@@ -82,13 +84,12 @@ static JSValue rl_hide_window(JSContext *ctx, JSValueConst this_val, int argc, J
 
 static JSValue rl_set_window_icon(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	Image* icon;
+	Image *icon = (Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
 
-	if (JS_ToInt64(ctx, (int64_t*)&icon, argv[0]))
+	if (!icon)
 		return JS_EXCEPTION;
 
 	SetWindowIcon(*icon);
-	// SetWindowIcon(LoadImage("grass_colored.png"));
 	return JS_UNDEFINED;
 }
 
@@ -307,6 +308,32 @@ static JSValue rl_end_drawing(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_UNDEFINED;
 }
 
+static JSValue rl_begin_mode_2d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Camera2D cam = *(Camera2D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera2d_class_id);
+	BeginMode2D(cam);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_end_mode_2d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	EndMode2D();
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_begin_mode_3d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Camera3D cam = *(Camera3D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
+	BeginMode3D(cam);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_end_mode_3d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	EndMode3D();
+	return JS_UNDEFINED;
+}
+
 #pragma endregion
 
 #pragma region Screen-space-related functions
@@ -376,20 +403,33 @@ static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, 
 
 static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
+	JSValue obj;
+	obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
 	const char* fileName = NULL;
 
 	fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
 		return JS_EXCEPTION;
 
-	Image* pointer = malloc(sizeof(Image));
+	Image* p = js_mallocz(ctx, sizeof(Image));
 	Image image = LoadImage(fileName);
-	memcpy(pointer, &image, sizeof(Image));
 
-	JSValue pointerValue = JS_NewInt64(ctx, (int64_t)pointer);
-	printf("%ld = image pointer\n", (int64_t)pointer);
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
 
-	return pointerValue;
+	memcpy(p, &image, sizeof(Image));
+
+	JS_SetOpaque(obj, p);
+
+	printf("%ld = pointer\n", (int64_t)p);
+
+	return obj;
 }
 
 static JSValue rl_js_get_image_width(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -465,7 +505,7 @@ static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSV
 
 // function entries
 
-static const JSCFunctionListEntry js_qjs_raylib_funcs[] = {
+static const JSCFunctionListEntry js_rl_funcs[] = {
 	/**
 	 * module: core
 	 */
@@ -481,7 +521,7 @@ static const JSCFunctionListEntry js_qjs_raylib_funcs[] = {
 	JS_CFUNC_DEF("toggleFullscreen", 0, rl_toggle_fullscreen),
 	JS_CFUNC_DEF("unhideWindow", 0, rl_unhide_window),
 	JS_CFUNC_DEF("hideWindow", 0, rl_hide_window),
-	JS_CFUNC_DEF("setWindowIconImpl", 1, rl_set_window_icon),
+	JS_CFUNC_DEF("setWindowIcon", 1, rl_set_window_icon),
 	JS_CFUNC_DEF("setWindowTitle", 1, rl_set_window_title),
 	JS_CFUNC_DEF("setWindowPosition", 2, rl_set_window_position),
 	JS_CFUNC_DEF("setWindowMonitor", 1, rl_set_window_monitor),
@@ -511,6 +551,11 @@ static const JSCFunctionListEntry js_qjs_raylib_funcs[] = {
 	JS_CFUNC_DEF("clearBackground", 1, rl_clear_background),
 	JS_CFUNC_DEF("beginDrawing", 0, rl_begin_drawing),
 	JS_CFUNC_DEF("endDrawing", 0, rl_end_drawing),
+
+	JS_CFUNC_DEF("beginMode2D", 1, rl_begin_mode_2d),
+	JS_CFUNC_DEF("endMode2D", 0, rl_end_mode_2d),
+	JS_CFUNC_DEF("beginMode3D", 1, rl_begin_mode_3d),
+	JS_CFUNC_DEF("endMode3D", 0, rl_end_mode_3d),
 	#pragma endregion
 
 	// Screen-space-related functions
@@ -555,19 +600,23 @@ static const JSCFunctionListEntry js_qjs_raylib_funcs[] = {
 
 // initialize as a QuickJS module
 
-static int js_qjs_raylib_init(JSContext *ctx, JSModuleDef *m)
+static int js_rl_init(JSContext *ctx, JSModuleDef *m)
 {
-	return JS_SetModuleExportList(ctx, m, js_qjs_raylib_funcs, countof(js_qjs_raylib_funcs));
+	js_rl_init_classes(ctx, m);
+
+	return JS_SetModuleExportList(ctx, m, js_rl_funcs, countof(js_rl_funcs));
 }
 
 JSModuleDef *js_init_module(JSContext *ctx, const char *module_name)
 {
 	JSModuleDef *m;
-	m = JS_NewCModule(ctx, module_name, js_qjs_raylib_init);
+	m = JS_NewCModule(ctx, module_name, js_rl_init);
 	
 	if (!m)
 		return NULL;
 	
-	JS_AddModuleExportList(ctx, m, js_qjs_raylib_funcs, countof(js_qjs_raylib_funcs));
+	JS_AddModuleExportList(ctx, m, js_rl_funcs, countof(js_rl_funcs));
+	js_rl_init_module_classes(ctx, m);
+
 	return m;
 }

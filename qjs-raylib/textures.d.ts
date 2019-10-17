@@ -1,8 +1,3 @@
-export class Image
-{
-	pointer: number;
-	get width(): number;
-	get height(): number;
-}
+import { Image } from './qjs-raylib.so';
 
 export function loadImage(fileName: string): Image;

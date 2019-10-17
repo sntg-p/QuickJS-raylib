@@ -1,23 +1,13 @@
-// @ts-ignore
+// @ts-nocheck
 import * as rl from './qjs-raylib.so';
-import * as rlTextures from './textures.js';
 
 // Window-related functions
+
 export const initWindow = rl.initWindow;
 export const windowShouldClose = rl.windowShouldClose;
 export const closeWindow = rl.closeWindow;
 export const isWindowReady = rl.isWindowReady;
-
-/**
- * @param {rlTextures.Image} image
- */
-export function setWindowIcon(image)
-{
-	rl.setWindowIconImpl(image.pointer);
-}
-
-export const setWindowIconImpl = rl.setWindowIconImpl;
-
+export const setWindowIcon = rl.setWindowIcon;
 export const setWindowTitle = rl.setWindowTitle;
 export const setWindowPosition = rl.setWindowPosition;
 export const setWindowMonitor = rl.setWindowMonitor;
