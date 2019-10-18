@@ -1,4 +1,5 @@
 import * as rlTextures from './textures.js';
+import { Camera2D, Camera3D, RenderTexture } from './qjs-raylib.so.js';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);
@@ -34,6 +35,12 @@ export function disableHidden(): void;
 export function clearBackground(colorInt: number): void;
 export function beginDrawing(): void;
 export function endDrawing(): void;
+export function beginMode2D(camera: Camera2D): void;
+export function endMode2D(): void;
+export function beginMode3D(camera: Camera3D): void;
+export function endMode3D(): void;
+export function beginTextureMode(target: RenderTexture): void;
+export function endTextureMode(): void;
 
 // Screen-space-related functions
 

@@ -35,6 +35,12 @@ export const disableHidden = rl.disableHidden;
 export const clearBackground = rl.clearBackground;
 export const beginDrawing = rl.beginDrawing;
 export const endDrawing = rl.endDrawing;
+export const beginMode2D = rl.beginMode2D;
+export const endMode2D = rl.endMode2D;
+export const beginMode3D = rl.beginMode3D;
+export const endMode3D = rl.endMode3D;
+export const beginTextureMode = rl.beginTextureMode;
+export const endTextureMode = rl.endTextureMode;
 
 // Screen-space-related functions
 

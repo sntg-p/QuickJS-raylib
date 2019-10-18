@@ -334,6 +334,19 @@ static JSValue rl_end_mode_3d(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_UNDEFINED;
 }
 
+static JSValue rl_begin_texture_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	RenderTexture2D tex = *(RenderTexture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_render_texture_class_id);
+	BeginTextureMode(tex);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_end_texture_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	EndTextureMode();
+	return JS_UNDEFINED;
+}
+
 #pragma endregion
 
 #pragma region Screen-space-related functions
@@ -403,8 +416,7 @@ static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, 
 
 static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	JSValue obj;
-	obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
 
 	if (JS_IsException(obj))
 		return obj;
@@ -424,32 +436,14 @@ static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JS
 	}
 
 	memcpy(p, &image, sizeof(Image));
-
 	JS_SetOpaque(obj, p);
-
-	printf("%ld = pointer\n", (int64_t)p);
 
 	return obj;
 }
 
-static JSValue rl_js_get_image_width(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_load_render_texture(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	Image* icon;
-
-	if (JS_ToInt64(ctx, (int64_t*)&icon, argv[0]))
-		return JS_EXCEPTION;
-
-	return JS_NewInt32(ctx, icon->width);
-}
-
-static JSValue rl_js_get_image_height(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
-{
-	Image* icon;
-
-	if (JS_ToInt64(ctx, (int64_t*)&icon, argv[0]))
-		return JS_EXCEPTION;
-
-	return JS_NewInt32(ctx, icon->height);
+	return js_rl_render_texture_constructor(ctx, JS_UNDEFINED, argc, argv);
 }
 
 #pragma endregion
@@ -506,10 +500,7 @@ static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSV
 // function entries
 
 static const JSCFunctionListEntry js_rl_funcs[] = {
-	/**
-	 * module: core
-	 */
-
+	// module: core
 	#pragma region Window-related functions
 	JS_CFUNC_DEF("initWindow", 3, rl_init_window),
 	JS_CFUNC_DEF("windowShouldClose", 1, rl_window_should_close),
@@ -538,7 +529,6 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getClipboardText", 0, rl_get_clipboard_text),
 	JS_CFUNC_DEF("setClipboardText", 1, rl_set_clipboard_text),
 	#pragma endregion
-
 	#pragma region Cursor-related functions
 	JS_CFUNC_DEF("showCursor", 0, rl_show_cursor),
 	JS_CFUNC_DEF("hideCursor", 0, rl_hide_cursor),
@@ -546,52 +536,37 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("enableHidden", 0, rl_enable_cursor),
 	JS_CFUNC_DEF("disableHidden", 0, rl_disable_cursor),
 	#pragma endregion
-
 	#pragma region Drawing-related functions
 	JS_CFUNC_DEF("clearBackground", 1, rl_clear_background),
 	JS_CFUNC_DEF("beginDrawing", 0, rl_begin_drawing),
 	JS_CFUNC_DEF("endDrawing", 0, rl_end_drawing),
-
 	JS_CFUNC_DEF("beginMode2D", 1, rl_begin_mode_2d),
 	JS_CFUNC_DEF("endMode2D", 0, rl_end_mode_2d),
 	JS_CFUNC_DEF("beginMode3D", 1, rl_begin_mode_3d),
 	JS_CFUNC_DEF("endMode3D", 0, rl_end_mode_3d),
+	JS_CFUNC_DEF("beginTextureMode", 1, rl_begin_texture_mode),
+	JS_CFUNC_DEF("endTextureMode", 0, rl_end_texture_mode),
 	#pragma endregion
-
 	// Screen-space-related functions
-
 	#pragma region Timing-related functions
 	JS_CFUNC_DEF("setTargetFps", 1, rl_set_target_fps),
 	#pragma endregion
-
 	#pragma region Color-related functions
 	JS_CFUNC_DEF("colorToInt", 5, rl_color_to_int),
 	#pragma endregion
-
 	// Misc. functions
-
 	// Files management functions
-
 	// Persistent storage management
 
-	/**
-	 * module: shapes
-	 */
+	// module: shapes
 
-	/**
-	 * module: textures
-	 */
-
+	// module: textures
 	#pragma region Image/Texture2D data loading/unloading/saving functions
 	JS_CFUNC_DEF("loadImage", 1, rl_load_image),
-	JS_CFUNC_DEF("getImageWidth", 1, rl_js_get_image_width),
-	JS_CFUNC_DEF("getImageHeight", 1, rl_js_get_image_height),
+	JS_CFUNC_DEF("loadRenderTexture", 2, rl_load_render_texture),
 	#pragma endregion
-
-	/**
-	 * module: text
-	 */
-
+	
+	// module: text
 	#pragma region Text drawing functions
 	JS_CFUNC_DEF("drawFps", 2, rl_draw_fps),
 	JS_CFUNC_DEF("drawText", 5, rl_draw_text),
