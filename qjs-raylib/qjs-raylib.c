@@ -247,7 +247,6 @@ static JSValue rl_set_clipboard_text(JSContext *ctx, JSValueConst this_val, int 
 }
 
 #pragma endregion
-
 #pragma region Cursor-related functions
 
 static JSValue rl_show_cursor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -280,7 +279,6 @@ static JSValue rl_disable_cursor(JSContext *ctx, JSValueConst this_val, int argc
 }
 
 #pragma endregion
-
 #pragma region Drawing-related functions
 
 static JSValue rl_clear_background(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -348,11 +346,68 @@ static JSValue rl_end_texture_mode(JSContext *ctx, JSValueConst this_val, int ar
 }
 
 #pragma endregion
-
 #pragma region Screen-space-related functions
 
-#pragma endregion
+static JSValue rl_get_mouse_ray(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_ray_class_id);
+	Vector2 mousePosition = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Camera camera = *(Camera*)JS_GetOpaque2(ctx, argv[1], js_rl_camera3d_class_id);
 
+	Ray* p = js_mallocz(ctx, sizeof(Ray));
+	Ray ray = GetMouseRay(mousePosition, camera);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &ray, sizeof(Ray));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_world_to_screen(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_ray_class_id);
+	Vector3 spacePos = *(Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+	Camera camera = *(Camera3D*)JS_GetOpaque2(ctx, argv[1], js_rl_camera3d_class_id);
+
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Vector2 screenPos = GetWorldToScreen(spacePos, camera);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &screenPos, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_camera_matrix(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_matrix_class_id);
+	Camera camera = *(Camera3D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
+
+	Matrix* p = js_mallocz(ctx, sizeof(Matrix));
+	Matrix matrix = GetCameraMatrix(camera);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &matrix, sizeof(Matrix));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+#pragma endregion
 #pragma region Timing-related functions
 
 static JSValue rl_set_target_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -368,7 +423,6 @@ static JSValue rl_set_target_fps(JSContext *ctx, JSValueConst this_val, int argc
 }
 
 #pragma endregion
-
 #pragma region Color-related functions
 
 static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -391,15 +445,12 @@ static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, 
 }
 
 #pragma endregion
-
 #pragma region Misc. functions
 
 #pragma endregion
-
 #pragma region Files management functions
 
 #pragma endregion
-
 #pragma region Persistent storage management
 
 #pragma endregion
@@ -547,7 +598,11 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("beginTextureMode", 1, rl_begin_texture_mode),
 	JS_CFUNC_DEF("endTextureMode", 0, rl_end_texture_mode),
 	#pragma endregion
-	// Screen-space-related functions
+	#pragma region Screen-space-related functions
+	JS_CFUNC_DEF("getMouseRay", 2, rl_get_mouse_ray),
+	JS_CFUNC_DEF("getWorldToScreen", 2, rl_get_world_to_screen),
+	JS_CFUNC_DEF("getCameraMatrix", 1, rl_get_camera_matrix),
+	#pragma endregion
 	#pragma region Timing-related functions
 	JS_CFUNC_DEF("setTargetFps", 1, rl_set_target_fps),
 	#pragma endregion

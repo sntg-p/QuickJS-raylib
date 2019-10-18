@@ -1,5 +1,5 @@
 import * as rlTextures from './textures.js';
-import { Camera2D, Camera3D, RenderTexture } from './qjs-raylib.so.js';
+import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix } from './qjs-raylib.so.js';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);
@@ -43,6 +43,9 @@ export function beginTextureMode(target: RenderTexture): void;
 export function endTextureMode(): void;
 
 // Screen-space-related functions
+export function getMouseRay(mousePosition: Vector2, camera: Camera2D): Ray;
+export function getWorldToScreen(position: Vector3, camera: Camera2D): Vector2;
+export function getCameraMatrix(camera: Camera2D): Matrix;
 
 // Timing-related functions
 export function setTargetFps(fps: number): void;
