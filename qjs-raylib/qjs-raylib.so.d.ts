@@ -82,6 +82,7 @@ export class RenderTexture
 	get depth(): Texture;
 	get depthTexture(): boolean;
 	set depthTexture(value: boolean): void;
+	constructor(width: number, height: number);
 }
 
 export interface NPatchInfo
