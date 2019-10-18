@@ -422,6 +422,21 @@ static JSValue rl_set_target_fps(JSContext *ctx, JSValueConst this_val, int argc
 	return JS_UNDEFINED;
 }
 
+static JSValue rl_get_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetFPS());
+}
+
+static JSValue rl_get_frame_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewFloat64(ctx, GetFrameTime());
+}
+
+static JSValue rl_get_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewFloat64(ctx, GetTime());
+}
+
 #pragma endregion
 #pragma region Color-related functions
 
@@ -605,6 +620,9 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	#pragma endregion
 	#pragma region Timing-related functions
 	JS_CFUNC_DEF("setTargetFps", 1, rl_set_target_fps),
+	JS_CFUNC_DEF("getFps", 0, rl_get_fps),
+	JS_CFUNC_DEF("getFrameTime", 0, rl_get_frame_time),
+	JS_CFUNC_DEF("getTime", 0, rl_get_time),
 	#pragma endregion
 	#pragma region Color-related functions
 	JS_CFUNC_DEF("colorToInt", 5, rl_color_to_int),

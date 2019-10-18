@@ -49,6 +49,9 @@ export function getCameraMatrix(camera: Camera2D): Matrix;
 
 // Timing-related functions
 export function setTargetFps(fps: number): void;
+export function getFps(): number;
+export function getFrameTime(): number;
+export function getTime(): number;
 
 export function drawText(text: string, x: number, y: number, size: number, colorInt: number): void;
 export function drawFps(x: number, y: number): void;

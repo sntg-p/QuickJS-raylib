@@ -43,10 +43,17 @@ export const beginTextureMode = rl.beginTextureMode;
 export const endTextureMode = rl.endTextureMode;
 
 // Screen-space-related functions
+export const getMouseRay = rl.getMouseRay;
+export const getWorldToScreen = rl.getWorldToScreen;
+export const getCameraMatrix = rl.getCameraMatrix;
 
 // Timing-related functions
 export const setTargetFps = rl.setTargetFps;
+export const getFps = rl.getFps;
+export const getFrameTime = rl.getFrameTime;
+export const getTime = rl.getTime;
 
+// asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;
 
