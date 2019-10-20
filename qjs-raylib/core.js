@@ -82,6 +82,10 @@ export const isFileDropped = rl.isFileDropped;
 export const getDroppedFiles = rl.getDroppedFiles;
 export const getFileModTime = rl.getFileModTime;
 
+// Persistent storage management
+export const storageSaveValue = rl.storageSaveValue;
+export const storageLoadValue = rl.storageLoadValue;
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;

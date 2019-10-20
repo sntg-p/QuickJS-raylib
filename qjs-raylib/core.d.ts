@@ -116,6 +116,10 @@ export function isFileDropped(): bool;
 export function getDroppedFiles(): string[];
 export function getFileModTime(fileName: string): number;
 
+// Persistent storage management
+export function storageSaveValue(position: number, value: number): void;
+export function storageLoadValue(position: number): number;
+
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
 export function drawFps(x: number, y: number): void;

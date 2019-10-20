@@ -745,6 +745,33 @@ static JSValue rl_get_file_mod_time(JSContext *ctx, JSValueConst this_val, int a
 #pragma endregion
 #pragma region Persistent storage management
 
+static JSValue rl_storage_save_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int position, value;
+
+	if (JS_ToInt32(ctx, &position, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &value, argv[1]))
+		return JS_EXCEPTION;
+
+	StorageSaveValue(position, value);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int position;
+
+	if (JS_ToInt32(ctx, &position, argv[0]))
+		return JS_EXCEPTION;
+
+	int value = StorageLoadValue(position);
+
+	return JS_UNDEFINED;
+}
+
 #pragma endregion
 // module: shapes
 // module: textures
@@ -943,7 +970,12 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getFileModTime", 1, rl_get_file_mod_time),
 
 	#pragma endregion
-	// Persistent storage management
+	#pragma region Persistent storage management
+
+	JS_CFUNC_DEF("storageSaveValue", 2, rl_storage_save_value),
+	JS_CFUNC_DEF("storageLoadValue", 1, rl_storage_load_value),
+
+	#pragma endregion
 
 	// module: shapes
 
