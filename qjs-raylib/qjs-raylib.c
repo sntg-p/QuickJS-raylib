@@ -7,10 +7,7 @@
 
 #include "structs.h"
 
-/**
- * module: core
- */
-
+// module: core
 #pragma region Window-related functions
 
 static JSValue rl_init_window(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -562,6 +559,8 @@ static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueC
 #pragma endregion
 #pragma region Misc. functions
 
+
+
 #pragma endregion
 #pragma region Files management functions
 
@@ -569,15 +568,8 @@ static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueC
 #pragma region Persistent storage management
 
 #pragma endregion
-
-/**
- * module: shapes
- */
-
-/**
- * module: textures
- */
-
+// module: shapes
+// module: textures
 #pragma region Image/Texture2D data loading/unloading/saving functions
 
 static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -613,11 +605,7 @@ static JSValue rl_load_render_texture(JSContext *ctx, JSValueConst this_val, int
 }
 
 #pragma endregion
-
-/**
- * module: text
- */
-
+// module: text
 #pragma region Text drawing functions
 
 static JSValue rl_draw_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -671,11 +659,12 @@ static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSV
 
 #pragma endregion
 
-// function entries
 
+// function entries
 static const JSCFunctionListEntry js_rl_funcs[] = {
 	// module: core
 	#pragma region Window-related functions
+
 	JS_CFUNC_DEF("initWindow", 3, rl_init_window),
 	JS_CFUNC_DEF("windowShouldClose", 1, rl_window_should_close),
 	JS_CFUNC_DEF("closeWindow", 0, rl_close_window),
@@ -702,15 +691,19 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getMonitorName", 1, rl_get_monitor_name),
 	JS_CFUNC_DEF("getClipboardText", 0, rl_get_clipboard_text),
 	JS_CFUNC_DEF("setClipboardText", 1, rl_set_clipboard_text),
+
 	#pragma endregion
 	#pragma region Cursor-related functions
+
 	JS_CFUNC_DEF("showCursor", 0, rl_show_cursor),
 	JS_CFUNC_DEF("hideCursor", 0, rl_hide_cursor),
 	JS_CFUNC_DEF("isCursorHidden", 0, rl_is_cursor_hidden),
 	JS_CFUNC_DEF("enableHidden", 0, rl_enable_cursor),
 	JS_CFUNC_DEF("disableHidden", 0, rl_disable_cursor),
+
 	#pragma endregion
 	#pragma region Drawing-related functions
+
 	JS_CFUNC_DEF("clearBackground", 1, rl_clear_background),
 	JS_CFUNC_DEF("beginDrawing", 0, rl_begin_drawing),
 	JS_CFUNC_DEF("endDrawing", 0, rl_end_drawing),
@@ -720,17 +713,22 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("endMode3D", 0, rl_end_mode_3d),
 	JS_CFUNC_DEF("beginTextureMode", 1, rl_begin_texture_mode),
 	JS_CFUNC_DEF("endTextureMode", 0, rl_end_texture_mode),
+
 	#pragma endregion
 	#pragma region Screen-space-related functions
+
 	JS_CFUNC_DEF("getMouseRay", 2, rl_get_mouse_ray),
 	JS_CFUNC_DEF("getWorldToScreen", 2, rl_get_world_to_screen),
 	JS_CFUNC_DEF("getCameraMatrix", 1, rl_get_camera_matrix),
+
 	#pragma endregion
 	#pragma region Timing-related functions
+
 	JS_CFUNC_DEF("setTargetFps", 1, rl_set_target_fps),
 	JS_CFUNC_DEF("getFps", 0, rl_get_fps),
 	JS_CFUNC_DEF("getFrameTime", 0, rl_get_frame_time),
 	JS_CFUNC_DEF("getTime", 0, rl_get_time),
+
 	#pragma endregion
 	#pragma region Color-related functions
 
