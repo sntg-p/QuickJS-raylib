@@ -75,7 +75,7 @@ static void js_rl_init_image_class(JSContext *ctx, JSModuleDef *m)
 	proto = JS_NewObject(ctx);
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_image_proto_funcs, countof(js_rl_image_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_image_class_id, proto);
-	// JS_NewCFunction2(ctx, js_rl_image_constructor, "Image", 1, JS_CFUNC_constructor, 0);
+	// JS_NewCFunction2(ctx, js_rl_image_constructor, "Image", 1, JS_CFUNC_constructor_or_func, 0);
 }
 
 #pragma endregion
@@ -91,7 +91,7 @@ static JSValue js_rl_vector2_get_x(JSContext *ctx, JSValueConst this_val)
 	Vector2 *p = (Vector2 *)JS_GetOpaque2(ctx, this_val, js_rl_vector2_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->x);
+		return JS_NewFloat64(ctx, p->x);
 	else
 		return JS_EXCEPTION;
 }
@@ -123,7 +123,7 @@ static JSValue js_rl_vector2_get_y(JSContext *ctx, JSValueConst this_val)
 	Vector2 *p = (Vector2 *)JS_GetOpaque2(ctx, this_val, js_rl_vector2_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->y);
+		return JS_NewFloat64(ctx, p->y);
 	else
 		return JS_EXCEPTION;
 }
@@ -155,7 +155,7 @@ static const JSCFunctionListEntry js_rl_vector2_proto_funcs[] = {
 		JS_CGETSET_DEF("y", js_rl_vector2_get_y, js_rl_vector2_set_y),
 };
 
-static JSValue js_rl_new_vector2(JSContext *ctx, int x, int y)
+static JSValue js_rl_new_vector2(JSContext *ctx, double x, double y)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
 
@@ -174,12 +174,12 @@ static JSValue js_rl_new_vector2(JSContext *ctx, int x, int y)
 
 static JSValue js_rl_vector2_constructor(JSContext *ctx, JSValueConst new_target, int argc, JSValueConst *argv)
 {
-	int x, y;
+	double x, y;
 
-	if (JS_ToInt32(ctx, &x, argv[0]))
+	if (JS_ToFloat64(ctx, &x, argv[0]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &y, argv[1]))
+	if (JS_ToFloat64(ctx, &y, argv[1]))
 		return JS_EXCEPTION;
 
 	return js_rl_new_vector2(ctx, x, y);
@@ -194,7 +194,7 @@ static void js_rl_init_vector2_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_vector2_proto_funcs, countof(js_rl_vector2_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_vector2_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_vector2_constructor, "Vector2", 2, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_vector2_constructor, "Vector2", 2, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Vector2", obj);
 }
 
@@ -211,7 +211,7 @@ static JSValue js_rl_vector3_get_x(JSContext *ctx, JSValueConst this_val)
 	Vector3 *p = (Vector3 *)JS_GetOpaque2(ctx, this_val, js_rl_vector3_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->x);
+		return JS_NewFloat64(ctx, p->x);
 	else
 		return JS_EXCEPTION;
 }
@@ -243,7 +243,7 @@ static JSValue js_rl_vector3_get_y(JSContext *ctx, JSValueConst this_val)
 	Vector3 *p = (Vector3 *)JS_GetOpaque2(ctx, this_val, js_rl_vector3_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->y);
+		return JS_NewFloat64(ctx, p->y);
 	else
 		return JS_EXCEPTION;
 }
@@ -275,7 +275,7 @@ static JSValue js_rl_vector3_get_z(JSContext *ctx, JSValueConst this_val)
 	Vector3 *p = (Vector3 *)JS_GetOpaque2(ctx, this_val, js_rl_vector3_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->z);
+		return JS_NewFloat64(ctx, p->z);
 	else
 		return JS_EXCEPTION;
 }
@@ -351,12 +351,11 @@ static void js_rl_init_vector3_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_vector3_proto_funcs, countof(js_rl_vector3_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_vector3_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_vector3_constructor, "Vector3", 3, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_vector3_constructor, "Vector3", 3, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Vector3", obj);
 }
 
 #pragma endregion
-
 #pragma region Vector4
 
 static JSClassID js_rl_vector4_class_id;
@@ -368,7 +367,7 @@ static JSValue js_rl_vector4_get_x(JSContext *ctx, JSValueConst this_val)
 	Vector4 *p = (Vector4 *)JS_GetOpaque2(ctx, this_val, js_rl_vector4_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->x);
+		return JS_NewFloat64(ctx, p->x);
 	else
 		return JS_EXCEPTION;
 }
@@ -400,7 +399,7 @@ static JSValue js_rl_vector4_get_y(JSContext *ctx, JSValueConst this_val)
 	Vector4 *p = (Vector4 *)JS_GetOpaque2(ctx, this_val, js_rl_vector4_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->y);
+		return JS_NewFloat64(ctx, p->y);
 	else
 		return JS_EXCEPTION;
 }
@@ -432,7 +431,7 @@ static JSValue js_rl_vector4_get_z(JSContext *ctx, JSValueConst this_val)
 	Vector4 *p = (Vector4 *)JS_GetOpaque2(ctx, this_val, js_rl_vector4_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->z);
+		return JS_NewFloat64(ctx, p->z);
 	else
 		return JS_EXCEPTION;
 }
@@ -464,7 +463,7 @@ static JSValue js_rl_vector4_get_w(JSContext *ctx, JSValueConst this_val)
 	Vector4 *p = (Vector4 *)JS_GetOpaque2(ctx, this_val, js_rl_vector4_class_id);
 
 	if (p)
-		return JS_NewInt32(ctx, p->w);
+		return JS_NewFloat64(ctx, p->w);
 	else
 		return JS_EXCEPTION;
 }
@@ -498,7 +497,7 @@ static const JSCFunctionListEntry js_rl_vector4_proto_funcs[] = {
 		JS_CGETSET_DEF("w", js_rl_vector4_get_w, js_rl_vector4_set_w),
 };
 
-static JSValue js_rl_new_vector4(JSContext *ctx, int x, int y, int z, int w)
+static JSValue js_rl_new_vector4(JSContext *ctx, double x, double y, double z, double w)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector4_class_id);
 
@@ -519,18 +518,18 @@ static JSValue js_rl_new_vector4(JSContext *ctx, int x, int y, int z, int w)
 
 static JSValue js_rl_vector4_constructor(JSContext *ctx, JSValueConst new_target, int argc, JSValueConst *argv)
 {
-	int x, y, z, w;
+	double x, y, z, w;
 
-	if (JS_ToInt32(ctx, &x, argv[0]))
+	if (JS_ToFloat64(ctx, &x, argv[0]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &y, argv[1]))
+	if (JS_ToFloat64(ctx, &y, argv[1]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &z, argv[2]))
+	if (JS_ToFloat64(ctx, &z, argv[2]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &w, argv[3]))
+	if (JS_ToFloat64(ctx, &w, argv[3]))
 		return JS_EXCEPTION;
 
 	return js_rl_new_vector4(ctx, x, y, z, w);
@@ -545,7 +544,7 @@ static void js_rl_init_vector4_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_vector4_proto_funcs, countof(js_rl_vector4_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_vector4_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_vector4_constructor, "Vector4", 4, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_vector4_constructor, "Vector4", 4, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Vector4", obj);
 }
 
@@ -733,12 +732,11 @@ static void js_rl_init_camera2d_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_camera2d_proto_funcs, countof(js_rl_camera2d_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_camera2d_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_camera2d_constructor, "Camera2D", 4, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_camera2d_constructor, "Camera2D", 4, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Camera2D", obj);
 }
 
 #pragma endregion
-
 #pragma region Camera3D
 
 static JSClassID js_rl_camera3d_class_id;
@@ -953,12 +951,11 @@ static void js_rl_init_camera3d_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_camera3d_proto_funcs, countof(js_rl_camera3d_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_camera3d_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_camera3d_constructor, "Camera3D", 4, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_camera3d_constructor, "Camera3D", 4, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Camera3D", obj);
 }
 
 #pragma endregion
-
 #pragma region Texture2D class
 
 static JSClassID js_rl_texture2d_class_id;
@@ -1043,7 +1040,6 @@ static void js_rl_init_texture2d_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
-
 #pragma region RenderTexture
 
 static JSClassID js_rl_render_texture_class_id;
@@ -1231,12 +1227,11 @@ static void js_rl_init_render_texture_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_render_texture_proto_funcs, countof(js_rl_render_texture_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_render_texture_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_render_texture_constructor, "RenderTexture2D", 2, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_render_texture_constructor, "RenderTexture2D", 2, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "RenderTexture2D", obj);
 }
 
 #pragma endregion
-
 #pragma region Ray
 
 static JSClassID js_rl_ray_class_id;
@@ -1344,12 +1339,11 @@ static void js_rl_init_ray_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_ray_proto_funcs, countof(js_rl_ray_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_ray_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_ray_constructor, "Ray", 4, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_ray_constructor, "Ray", 4, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Ray", obj);
 }
 
 #pragma endregion
-
 #pragma region Matrix
 
 static JSClassID js_rl_matrix_class_id;
@@ -1936,7 +1930,7 @@ static void js_rl_init_matrix_class(JSContext *ctx, JSModuleDef *m)
 	JS_SetPropertyFunctionList(ctx, proto, js_rl_matrix_proto_funcs, countof(js_rl_matrix_proto_funcs));
 	JS_SetClassProto(ctx, js_rl_matrix_class_id, proto);
 
-	obj = JS_NewCFunction2(ctx, js_rl_matrix_constructor, "Matrix", 4, JS_CFUNC_constructor, 0);
+	obj = JS_NewCFunction2(ctx, js_rl_matrix_constructor, "Matrix", 4, JS_CFUNC_constructor_or_func, 0);
 	JS_SetModuleExport(ctx, m, "Matrix", obj);
 }
 

@@ -1,6 +1,7 @@
 type pointer = number;
 const MAX_SHADER_LOCATIONS = 32;
 
+export function Vector2(x: number, y: number);
 export class Vector2
 {
 	x: number;
@@ -8,12 +9,14 @@ export class Vector2
 	constructor(x: number, y: number);
 }
 
+export function Vector3(x: number, y: number, z: number);
 export class Vector3 extends Vector2
 {
 	z: number;
 	constructor(x: number, y: number, z: number);
 }
 
+export function Vector4(x: number, y: number, z: number, w: number);
 export class Vector4 extends Vector3
 {
 	w: number;
@@ -22,6 +25,7 @@ export class Vector4 extends Vector3
 
 export type Quaternion = Vector4;
 
+export function Matrix(m0: number, m1: number, m2: number, m3: number, m4: number, m5: number, m6: number, m7: number, m8: number, m9: number, m10: number, m11: number, m12: number, m13: number, m14: number, m15: number);
 export class Matrix
 {
 	m0: number;
