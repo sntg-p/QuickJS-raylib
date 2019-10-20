@@ -619,6 +619,17 @@ static JSValue rl_get_random_value(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_NewInt32(ctx, GetRandomValue(min, max));
 }
 
+static JSValue rl_open_url(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* url = JS_ToCString(ctx, argv[0]);
+	if (url == NULL)
+		return JS_EXCEPTION;
+
+	OpenURL(url);
+
+	return JS_UNDEFINED;
+}
+
 #pragma endregion
 #pragma region Files management functions
 
@@ -952,6 +963,7 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("setTraceLogExit", 1, rl_set_trace_log_exit),
 	JS_CFUNC_DEF("takeScreenshot", 1, rl_take_screenshot),
 	JS_CFUNC_DEF("getRandomValue", 2, rl_get_random_value),
+	JS_CFUNC_DEF("openURL", 1, rl_open_url),
 
 	#pragma endregion
 	#pragma region Files management functions

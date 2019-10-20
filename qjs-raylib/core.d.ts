@@ -101,6 +101,8 @@ export function setTraceLogExit(logType: TraceLogType): void;
 export function takeScreenshot(fileName: string): void;
 /** Returns a random value between min and max (both included) */
 export function getRandomValue(min: number, max: number): int;
+/** Open URL with default system browser (if available) */
+export function openURL(url: string): void;
 
 // Files management related functions
 export function fileExists(fileName: string): bool;

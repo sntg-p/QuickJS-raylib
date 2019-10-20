@@ -67,6 +67,7 @@ export const setTraceLogLevel = rl.setTraceLogLevel;
 export const setTraceLogExit = rl.setTraceLogExit;
 export const takeScreenshot = rl.takeScreenshot;
 export const getRandomValue = rl.getRandomValue;
+export const openURL = rl.openURL;
 
 // Files management functions
 export const fileExists = rl.fileExists;
