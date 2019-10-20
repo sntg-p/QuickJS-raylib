@@ -5,21 +5,24 @@
 			"label": "start",
 			"type": "shell",
 			"command": "qjsc test.js && ./a.out",
-			"group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			}
 		},
 		{
 			"label": "build lib",
 			"type": "shell",
 			"command": "gcc -c -Wall -Wno-unknown-pragmas -fpic -o qjs-raylib/qjs-raylib.o qjs-raylib/qjs-raylib.c && gcc --shared -o qjs-raylib/qjs-raylib.so qjs-raylib/qjs-raylib.o -L/usr/local/lib/raylib/ -lraylib -lGL -lm -lpthread -ldl -lrt -lX11",
 			"group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			}
 		}
 	]
 }
