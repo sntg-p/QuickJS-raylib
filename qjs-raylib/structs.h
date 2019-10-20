@@ -1935,6 +1935,201 @@ static void js_rl_init_matrix_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
+#pragma region Color
+
+static JSClassID js_rl_color_class_id;
+
+static JSClassDef js_rl_color_class = {"Color"};
+
+static JSValue js_rl_color_get_r(JSContext *ctx, JSValueConst this_val)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->r);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_color_set_r(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	int value;
+
+	if (JS_ToInt32(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->r = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_color_get_g(JSContext *ctx, JSValueConst this_val)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->g);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_color_set_g(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	int value;
+
+	if (JS_ToInt32(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->g = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_color_get_b(JSContext *ctx, JSValueConst this_val)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->b);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_color_set_b(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	int value;
+
+	if (JS_ToInt32(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->b = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_color_get_a(JSContext *ctx, JSValueConst this_val)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->a);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_color_set_a(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Color *p = (Color *)JS_GetOpaque2(ctx, this_val, js_rl_color_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	int value;
+
+	if (JS_ToInt32(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->a = value;
+
+	return JS_UNDEFINED;
+}
+
+static const JSCFunctionListEntry js_rl_color_proto_funcs[] = {
+		JS_CGETSET_DEF("r", js_rl_color_get_r, js_rl_color_set_r),
+		JS_CGETSET_DEF("g", js_rl_color_get_g, js_rl_color_set_g),
+		JS_CGETSET_DEF("b", js_rl_color_get_b, js_rl_color_set_b),
+		JS_CGETSET_DEF("a", js_rl_color_get_a, js_rl_color_set_a),
+};
+
+static JSValue js_rl_new_color(JSContext *ctx, int r, int g, int b, int a)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_color_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Color *p = js_mallocz(ctx, sizeof(Color));
+
+	p->r = r;
+	p->g = g;
+	p->b = b;
+	p->a = a;
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue js_rl_color_constructor(JSContext *ctx, JSValueConst new_target, int argc, JSValueConst *argv)
+{
+	int r, g, b, a;
+
+	if (JS_ToInt32(ctx, &r, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &g, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &b, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(argv[3]))
+		a = 255;
+	else if (JS_ToInt32(ctx, &a, argv[3]))
+		return JS_EXCEPTION;
+
+	return js_rl_new_color(ctx, r, g, b, a);
+}
+
+static void js_rl_init_color_class(JSContext *ctx, JSModuleDef *m)
+{
+	JSValue proto, obj;
+	JS_NewClassID(&js_rl_color_class_id);
+	JS_NewClass(JS_GetRuntime(ctx), js_rl_color_class_id, &js_rl_color_class);
+	proto = JS_NewObject(ctx);
+	JS_SetPropertyFunctionList(ctx, proto, js_rl_color_proto_funcs, countof(js_rl_color_proto_funcs));
+	JS_SetClassProto(ctx, js_rl_color_class_id, proto);
+
+	obj = JS_NewCFunction2(ctx, js_rl_color_constructor, "Color", 4, JS_CFUNC_constructor_or_func, 0);
+	JS_SetModuleExport(ctx, m, "Color", obj);
+}
+
+#pragma endregion
 
 static void js_rl_init_classes(JSContext *ctx, JSModuleDef *m)
 {
@@ -1947,6 +2142,7 @@ static void js_rl_init_classes(JSContext *ctx, JSModuleDef *m)
 	js_rl_init_texture2d_class(ctx, m);
 	js_rl_init_render_texture_class(ctx, m);
 	js_rl_init_ray_class(ctx, m);
+	js_rl_init_color_class(ctx, m);
 	js_rl_init_matrix_class(ctx, m);
 }
 
@@ -1960,5 +2156,6 @@ static void js_rl_init_module_classes(JSContext *ctx, JSModuleDef *m)
 	JS_AddModuleExport(ctx, m, "Texture2D");
 	JS_AddModuleExport(ctx, m, "RenderTexture2D");
 	JS_AddModuleExport(ctx, m, "Ray");
+	JS_AddModuleExport(ctx, m, "Color");
 	JS_AddModuleExport(ctx, m, "Matrix");
 }
