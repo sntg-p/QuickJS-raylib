@@ -559,7 +559,65 @@ static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueC
 #pragma endregion
 #pragma region Misc. functions
 
+static JSValue rl_set_config_flags(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int flags;
 
+	if (JS_ToInt32(ctx, &flags, argv[0]))
+		return JS_EXCEPTION;
+
+	SetConfigFlags((unsigned char)flags);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_trace_log_level(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int logType;
+
+	if (JS_ToInt32(ctx, &logType, argv[0]))
+		return JS_EXCEPTION;
+
+	SetTraceLogLevel(logType);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_trace_log_exit(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int logType;
+
+	if (JS_ToInt32(ctx, &logType, argv[0]))
+		return JS_EXCEPTION;
+
+	SetTraceLogExit(logType);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_take_screenshot(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	TakeScreenshot(fileName);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_get_random_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int min, max;
+
+	if (JS_ToInt32(ctx, &min, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &max, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewInt32(ctx, GetRandomValue(min, max));
+}
 
 #pragma endregion
 #pragma region Files management functions
@@ -740,7 +798,15 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("fade", 2, rl_fade),
 
 	#pragma endregion
-	// Misc. functions
+	#pragma region Misc. functions
+
+	JS_CFUNC_DEF("setConfigFlags", 1, rl_set_config_flags),
+	JS_CFUNC_DEF("setTraceLogLevel", 1, rl_set_trace_log_level),
+	JS_CFUNC_DEF("setTraceLogExit", 1, rl_set_trace_log_exit),
+	JS_CFUNC_DEF("takeScreenshot", 1, rl_take_screenshot),
+	JS_CFUNC_DEF("getRandomValue", 2, rl_get_random_value),
+
+	#pragma endregion
 	// Files management functions
 	// Persistent storage management
 

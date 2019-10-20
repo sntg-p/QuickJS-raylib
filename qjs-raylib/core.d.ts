@@ -65,6 +65,22 @@ export function colorFromHSV(hsv: Vector3);
 export function getColor(value: number);
 export function fade(color: Color, alpha: number);
 
+// Misc. functions
+/**
+ * Setup window configuration flags
+ * @param flags Use the OR bitwise operator to combine various flags
+ * @example setConfigFlags(ConfigFlag.FLAG_MSAA_4X_HINT || ConfigFlag.FLAG_WINDOW_RESIZABLE)
+ */
+export function setConfigFlags(flags: ConfigFlag);
+/** Set the current threshold (minimum) log level */
+export function setTraceLogLevel(logType: TraceLogType);
+/** Set the exit threshold (minimum) log level */
+export function setTraceLogExit(logType: TraceLogType);
+/** Takes a screenshot of current screen (saved as .png) */
+export function takeScreenshot(fileName: string);
+/** Returns a random value between min and max (both included) */
+export function getRandomValue(min: number, max: number);
+
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
 export function drawFps(x: number, y: number): void;

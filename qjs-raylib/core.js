@@ -61,6 +61,13 @@ export const colorFromHSV = rl.colorFromHSV;
 export const getColor = rl.getColor;
 export const fade = rl.fade;
 
+// Misc. functions
+export const setConfigFlags = rl.setConfigFlags;
+export const setTraceLogLevel = rl.setTraceLogLevel;
+export const setTraceLogExit = rl.setTraceLogExit;
+export const takeScreenshot = rl.takeScreenshot;
+export const getRandomValue = rl.getRandomValue;
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;
