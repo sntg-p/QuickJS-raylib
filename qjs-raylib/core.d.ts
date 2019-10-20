@@ -32,7 +32,11 @@ export function enableHidden(): void;
 export function disableHidden(): void;
 
 // Drawing-related functions
-export function clearBackground(colorInt: number): void;
+/**
+ * Clears the background with the color passed as a parameter
+ * @param color A color object or an integer in 0xRRGGBBAA form.
+ */
+export function clearBackground(color: Color | number): void;
 export function beginDrawing(): void;
 export function endDrawing(): void;
 export function beginMode2D(camera: Camera2D): void;

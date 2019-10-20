@@ -283,14 +283,22 @@ static JSValue rl_disable_cursor(JSContext *ctx, JSValueConst this_val, int argc
 
 static JSValue rl_clear_background(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	int color;
+	Color color = BLACK;
+	int colorInt;
 
-	if (JS_ToInt32(ctx, &color, argv[0])) {
-		ClearBackground(RAYWHITE);
-		return JS_UNDEFINED;
+	if (JS_IsNumber(argv[0]))
+	{
+		if (JS_ToInt32(ctx, &colorInt, argv[0])) {
+			ClearBackground(color);
+			return JS_UNDEFINED;
+		}
+		else
+			color = GetColor(colorInt);
 	}
+	else if (JS_IsObject(argv[0]))
+		color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
 
-	ClearBackground(GetColor(color));
+	ClearBackground(color);	
 	return JS_UNDEFINED;
 }
 
