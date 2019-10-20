@@ -79,7 +79,6 @@ static void js_rl_init_image_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
-
 #pragma region Vector2
 
 static JSClassID js_rl_vector2_class_id;
@@ -199,7 +198,6 @@ static void js_rl_init_vector2_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
-
 #pragma region Vector3
 
 static JSClassID js_rl_vector3_class_id;
@@ -549,7 +547,6 @@ static void js_rl_init_vector4_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
-
 #pragma region Camera2D
 
 static JSClassID js_rl_camera2d_class_id;
