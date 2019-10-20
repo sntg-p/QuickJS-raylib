@@ -20,6 +20,11 @@ rlCore.setWindowIcon(image);
 const bg = new Color(255, 128, 64);
 const fg = Color(255, 255, 255, 192);
 
+const asd = rlCore.getDirectoryFiles('./');
+asd.forEach(element => {
+	console.log(element);
+});
+
 while (!rlCore.windowShouldClose()) {
 	rlCore.beginDrawing();
 
