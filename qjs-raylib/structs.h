@@ -1875,22 +1875,22 @@ static JSValue js_rl_new_matrix(JSContext *ctx, double m0, double m1, double m2,
 
 	Matrix *p = js_mallocz(ctx, sizeof(Matrix));
 
-	p->m0;
-	p->m1;
-	p->m2;
-	p->m3;
-	p->m4;
-	p->m5;
-	p->m6;
-	p->m7;
-	p->m8;
-	p->m9;
-	p->m10;
-	p->m11;
-	p->m12;
-	p->m13;
-	p->m14;
-	p->m15;
+	p->m0 = m0;
+	p->m1 = m1;
+	p->m2 = m2;
+	p->m3 = m3;
+	p->m4 = m4;
+	p->m5 = m5;
+	p->m6 = m6;
+	p->m7 = m7;
+	p->m8 = m8;
+	p->m9 = m9;
+	p->m10 = m10;
+	p->m11 = m11;
+	p->m12 = m12;
+	p->m13 = m13;
+	p->m14 = m14;
+	p->m15 = m15;
 
 	JS_SetOpaque(obj, p);
 
