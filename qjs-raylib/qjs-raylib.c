@@ -450,21 +450,113 @@ static JSValue rl_get_time(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 
 static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	int r, g, b, a;
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
+	return JS_NewInt32(ctx, ColorToInt(color));
+}
 
-	if (JS_ToInt32(ctx, &r, argv[0]))
+static JSValue rl_color_normalize(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
+
+	Vector4* p = js_mallocz(ctx, sizeof(Vector4));
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector3_class_id);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Vector4 vector4 = ColorNormalize(color);
+	memcpy(p, &vector4, sizeof(Vector4));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_color_to_hsv(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
+	Vector3* p = js_mallocz(ctx, sizeof(Vector3));
+	Vector3 hsv = ColorToHSV(color);
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector3_class_id);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &hsv, sizeof(Vector3));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_color_from_hsv(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector3 hsv = *(Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	Color* p = js_mallocz(ctx, sizeof(Color));
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_color_class_id);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Color color = ColorFromHSV(hsv);
+	memcpy(p, &color, sizeof(Color));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_color(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int colorInt;
+
+	if (JS_ToInt32(ctx, &colorInt, argv[0]))
+		return JS_UNDEFINED;
+
+	Color* p = js_mallocz(ctx, sizeof(Color));
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_color_class_id);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Color color = GetColor(colorInt);
+	memcpy(p, &color, sizeof(Color));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
+
+	Color* p = js_mallocz(ctx, sizeof(Color));
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_color_class_id);
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	double fade;
+
+	if (JS_ToFloat64(ctx, &fade, argv[1]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &g, argv[1]))
-		return JS_EXCEPTION;
+	Color newColor = Fade(color, fade);
+	memcpy(p, &newColor, sizeof(Color));
+	JS_SetOpaque(obj, p);
 
-	if (JS_ToInt32(ctx, &b, argv[2]))
-		return JS_EXCEPTION;
-
-	if (JS_ToInt32(ctx, &a, argv[3]))
-		return JS_EXCEPTION;
-
-	return JS_NewInt32(ctx, ColorToInt((Color){r, g, b, a}));
+	return obj;
 }
 
 #pragma endregion
@@ -633,7 +725,14 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getTime", 0, rl_get_time),
 	#pragma endregion
 	#pragma region Color-related functions
-	JS_CFUNC_DEF("colorToInt", 5, rl_color_to_int),
+
+	JS_CFUNC_DEF("colorToInt", 1, rl_color_to_int),
+	JS_CFUNC_DEF("colorNormalize", 1, rl_color_normalize),
+	JS_CFUNC_DEF("colorToHSV", 1, rl_color_to_hsv),
+	JS_CFUNC_DEF("colorFromHSV", 1, rl_color_from_hsv),
+	JS_CFUNC_DEF("getColor", 1, rl_get_color),
+	JS_CFUNC_DEF("fade", 2, rl_fade),
+
 	#pragma endregion
 	// Misc. functions
 	// Files management functions

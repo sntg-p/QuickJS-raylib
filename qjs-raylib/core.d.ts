@@ -1,5 +1,5 @@
 import * as rlTextures from './textures.js';
-import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix } from './qjs-raylib.so.js';
+import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color } from './qjs-raylib.so.js';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);
@@ -57,6 +57,15 @@ export function getFps(): number;
 export function getFrameTime(): number;
 export function getTime(): number;
 
+// Color-related functions
+export function colorToInt(color: Color);
+export function colorNormalize(color: Color);
+export function colorToHSV(color: Color);
+export function colorFromHSV(hsv: Vector3);
+export function getColor(value: number);
+export function fade(color: Color, alpha: number);
+
+//
 export function drawText(text: string, x: number, y: number, size: number, colorInt: number): void;
 export function drawFps(x: number, y: number): void;
 

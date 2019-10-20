@@ -53,6 +53,14 @@ export const getFps = rl.getFps;
 export const getFrameTime = rl.getFrameTime;
 export const getTime = rl.getTime;
 
+// Color-related functions
+export const colorToInt = rl.colorToInt;
+export const colorNormalize = rl.colorNormalize;
+export const colorToHSV = rl.colorToHSV;
+export const colorFromHSV = rl.colorFromHSV;
+export const getColor = rl.getColor;
+export const fade = rl.fade;
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;
