@@ -65,8 +65,8 @@ export function colorFromHSV(hsv: Vector3);
 export function getColor(value: number);
 export function fade(color: Color, alpha: number);
 
-//
-export function drawText(text: string, x: number, y: number, size: number, colorInt: number): void;
+// Text drawing functions
+export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
 export function drawFps(x: number, y: number): void;
 
 export function loadImage(fileName: string): number;

@@ -638,7 +638,8 @@ static JSValue rl_draw_fps(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	const char* text = NULL;
-	int x, y, size, color;
+	int x, y, size, colorInt;
+	Color color = WHITE;
 	
 	text = JS_ToCString(ctx, argv[0]);
 	if (text == NULL)
@@ -653,10 +654,17 @@ static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	if (JS_ToInt32(ctx, &size, argv[3]))
 		return JS_EXCEPTION;
 
-	if (JS_ToInt32(ctx, &color, argv[4]))
-		return JS_EXCEPTION;
+	if (JS_IsNumber(argv[4]))
+	{
+		if (JS_ToInt32(ctx, &colorInt, argv[4]))
+			return JS_EXCEPTION;
+		else
+			color = GetColor(colorInt);
+	}
+	else if (JS_IsObject(argv[4]))
+		color = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
 
-	DrawText(text, x, y, size, GetColor(color));
+	DrawText(text, x, y, size, color);
 
 	return JS_UNDEFINED;
 }
