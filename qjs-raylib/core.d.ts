@@ -1,5 +1,5 @@
 import { ConfigFlag, TraceLogType } from './enums.js'
-import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color } from './qjs-raylib.so.js';
+import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './qjs-raylib.so.js';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);
@@ -74,17 +74,17 @@ export function getTime(): number;
 
 // Color-related functions
 /** Returns hexadecimal value for a Color */
-export function colorToInt(color: Color);
+export function colorToInt(color: Color): number;
 /** Returns color normalized as float [0..1] */
-export function colorNormalize(color: Color);
+export function colorNormalize(color: Color): Vector4;
 /** Returns HSV values for a Color */
-export function colorToHSV(color: Color);
+export function colorToHSV(color: Color): Vector3;
 /** Returns a Color from HSV values */
-export function colorFromHSV(hsv: Vector3);
+export function colorFromHSV(hsv: Vector3): Color;
 /** Returns a Color struct from hexadecimal value */
-export function getColor(value: number);
+export function getColor(value: number): Color;
 /** Color fade-in or fade-out, alpha goes from 0.0f to 1.0f */
-export function fade(color: Color, alpha: number);
+export function fade(color: Color, alpha: number): Color;
 
 // Misc. functions
 /**
@@ -92,15 +92,15 @@ export function fade(color: Color, alpha: number);
  * @param flags Use the OR bitwise operator to combine various flags
  * @example setConfigFlags(ConfigFlag.FLAG_MSAA_4X_HINT || ConfigFlag.FLAG_WINDOW_RESIZABLE)
  */
-export function setConfigFlags(flags: ConfigFlag);
+export function setConfigFlags(flags: ConfigFlag): void;
 /** Set the current threshold (minimum) log level */
-export function setTraceLogLevel(logType: TraceLogType);
+export function setTraceLogLevel(logType: TraceLogType): void;
 /** Set the exit threshold (minimum) log level */
-export function setTraceLogExit(logType: TraceLogType);
+export function setTraceLogExit(logType: TraceLogType): void;
 /** Takes a screenshot of current screen (saved as .png) */
-export function takeScreenshot(fileName: string);
+export function takeScreenshot(fileName: string): void;
 /** Returns a random value between min and max (both included) */
-export function getRandomValue(min: number, max: number);
+export function getRandomValue(min: number, max: number): int;
 
 // Files management related functions
 export function fileExists(fileName: string): bool;
