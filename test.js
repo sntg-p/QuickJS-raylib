@@ -1,6 +1,7 @@
 import { Color } from './qjs-raylib/qjs-raylib.so';
 import * as rlCore from './qjs-raylib/core.js';
 import * as rlTextures from './qjs-raylib/textures.js';
+import { ConfigFlag } from './qjs-raylib/enums.js'
 
 const screenWidth = 800;
 const screenHeight = 450;
@@ -8,6 +9,7 @@ const screenHeight = 450;
 rlCore.initWindow(screenWidth, screenHeight, 'raylib [core] example - basic window');
 
 rlCore.setTargetFps(60); // fps go between 8000 and 12000 if not set
+rlCore.setConfigFlags(ConfigFlag.FLAG_MSAA_4X_HINT || ConfigFlag.FLAG_FULLSCREEN_MODE);
 
 let textY = 200;
 let textSize = 20;
