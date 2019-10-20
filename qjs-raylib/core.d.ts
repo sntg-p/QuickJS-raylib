@@ -1,4 +1,4 @@
-import { ConfigFlag, TraceLogType, KeyboardKey } from './enums.js'
+import { ConfigFlag, TraceLogType, KeyboardKey, GamepadButton, MouseButton } from './enums.js'
 import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './qjs-raylib.so.js';
 
 // Window-related functions
@@ -131,6 +131,34 @@ export function getKeyPressed(): KeyboardKey;
 export function setExitKey(key: KeyboardKey): void;
 
 // Input-related functions: gamepads
+export function isGamepadAvailable(gamepad: number): boolean;
+export function isGamepadName(gamepad: number, name: string): boolean;
+export function getGamepadName(gamepad: number): void;
+export function isGamepadButtonPressed(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonDown(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonReleased(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonUp(gamepad: number, button: GamepadButton): boolean;
+export function getGamepadButtonPressed(): boolean;
+export function getGamepadAxisCount(gamepad: number): number;
+export function getGamepadAxisMovement(gamepad: number, axis: number): number;
+
+// Input-related functions: mouse
+export function isMouseButtonPressed(button: MouseButton): boolean;
+export function isMouseButtonDown(button: MouseButton): boolean;
+export function IsMouseButtonReleased(button: MouseButton): boolean;
+export function isMouseButtonUp(button: MouseButton): boolean;
+export function getMouseX(): number;
+export function getMouseY(): number;
+export function getMousePosition(): Vector2;
+export function setMousePosition(x: number, y: number): void;
+export function setMouseOffset(x: number, y: number): void;
+export function setMouseScale(x: number, y: number): void;
+export function getMouseWheelMove(): number;
+
+// Input-related functions: touch
+export function getTouchX(): number;
+export function getTouchY(): number;
+export function getTouchPosition(index: number): Vector2;
 
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;

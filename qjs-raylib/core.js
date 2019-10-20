@@ -2,7 +2,6 @@
 import * as rl from './qjs-raylib.so';
 
 // Window-related functions
-
 export const initWindow = rl.initWindow;
 export const windowShouldClose = rl.windowShouldClose;
 export const closeWindow = rl.closeWindow;
@@ -87,7 +86,7 @@ export const getFileModTime = rl.getFileModTime;
 export const storageSaveValue = rl.storageSaveValue;
 export const storageLoadValue = rl.storageLoadValue;
 
-// Input handling functions
+// Input-related functions: keyboard
 export const isKeyPressed = rl.isKeyPressed;
 export const isKeyDown = rl.isKeyDown;
 export const isKeyReleased = rl.isKeyReleased;
@@ -96,6 +95,34 @@ export const getKeyPressed = rl.getKeyPressed;
 export const setExitKey = rl.setExitKey;
 
 // Input-related functions: gamepads
+export const isGamepadAvailable = rl.isGamepadAvailable;
+export const isGamepadName = rl.isGamepadName;
+export const getGamepadName = rl.getGamepadName;
+export const isGamepadButtonPressed = rl.isGamepadButtonPressed;
+export const isGamepadButtonDown = rl.isGamepadButtonDown;
+export const isGamepadButtonReleased = rl.isGamepadButtonReleased;
+export const isGamepadButtonUp = rl.isGamepadButtonUp;
+export const getGamepadButtonPressed = rl.getGamepadButtonPressed;
+export const getGamepadAxisCount = rl.getGamepadAxisCount;
+export const getGamepadAxisMovement = rl.getGamepadAxisMovement;
+
+// Input-related functions: mouse
+export const isMouseButtonPressed = rl.isMouseButtonPressed;
+export const isMouseButtonDown = rl.isMouseButtonDown;
+export const IsMouseButtonReleased = rl.IsMouseButtonReleased;
+export const isMouseButtonUp = rl.isMouseButtonUp;
+export const getMouseX = rl.getMouseX;
+export const getMouseY = rl.getMouseY;
+export const getMousePosition = rl.getMousePosition;
+export const setMousePosition = rl.setMousePosition;
+export const setMouseOffset = rl.setMouseOffset;
+export const setMouseScale = rl.setMouseScale;
+export const getMouseWheelMove = rl.getMouseWheelMove;
+
+// Input-related functions: touch
+export const getTouchX = rl.getTouchX;
+export const getTouchY = rl.getTouchY;
+export const getTouchPosition = rl.getTouchPosition;
 
 // asd
 export const drawText = rl.drawText;

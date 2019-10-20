@@ -845,7 +845,283 @@ static JSValue rl_set_exit_key(JSContext *ctx, JSValueConst this_val, int argc, 
 }
 
 #pragma endregion
+#pragma region Input-related functions: gamepads
+
+static JSValue rl_is_gamepad_available(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadAvailable(gamepad));
+}
+
+static JSValue rl_is_gamepad_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	const char* name = JS_ToCString(ctx, argv[1]);
+	if (name == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadName(gamepad, name));
+}
+
+static JSValue rl_get_gamepad_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewString(ctx, GetGamepadName(gamepad));
+}
+
+static JSValue rl_is_gamepad_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad, button;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &button, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadButtonPressed(gamepad, button));
+}
+
+static JSValue rl_is_gamepad_button_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad, button;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &button, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadButtonDown(gamepad, button));
+}
+
+static JSValue rl_is_gamepad_button_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad, button;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &button, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadButtonReleased(gamepad, button));
+}
+
+static JSValue rl_is_gamepad_button_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad, button;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &button, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGamepadButtonUp(gamepad, button));
+}
+
+static JSValue rl_get_gamepad_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetGamepadButtonPressed());
+}
+
+static JSValue rl_get_gamepad_axis_count(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, GetGamepadAxisCount(gamepad));
+}
+
+static JSValue rl_get_gamepad_axis_movement(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gamepad, axis;
+
+	if (JS_ToInt32(ctx, &gamepad, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &axis, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewFloat64(ctx, GetGamepadAxisMovement(gamepad, axis));
+}
+
+#pragma endregion
+#pragma region Input-related functions: mouse
+
+static JSValue rl_is_mouse_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int button;
+
+	if (JS_ToInt32(ctx, &button, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsMouseButtonPressed(button));
+}
+
+static JSValue rl_is_mouse_button_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int button;
+
+	if (JS_ToInt32(ctx, &button, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsMouseButtonDown(button));
+}
+
+static JSValue rl_is_mouse_button_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int button;
+
+	if (JS_ToInt32(ctx, &button, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsMouseButtonReleased(button));
+}
+
+static JSValue rl_is_mouse_button_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int button;
+
+	if (JS_ToInt32(ctx, &button, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsMouseButtonUp(button));
+}
+
+static JSValue rl_get_mouse_x(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetMouseX());
+}
+
+static JSValue rl_get_mouse_y(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetMouseY());
+}
+
+static JSValue rl_get_mouse_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Vector2 mousePos = GetMousePosition();
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &mousePos, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_set_mouse_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int x, y;
+
+	if (JS_ToInt32(ctx, &x, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &y, argv[1]))
+		return JS_EXCEPTION;
+
+	SetMousePosition(x, y);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_mouse_offset(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int x, y;
+
+	if (JS_ToInt32(ctx, &x, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &y, argv[1]))
+		return JS_EXCEPTION;
+
+	SetMouseOffset(x, y);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_mouse_scale(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double x, y;
+
+	if (JS_ToFloat64(ctx, &x, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &y, argv[1]))
+		return JS_EXCEPTION;
+
+	SetMouseScale((float)x, (float)y);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_get_mouse_wheel_move(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetMouseWheelMove());
+}
+
+#pragma endregion
+#pragma region Input-related functions: touch
+
+static JSValue rl_get_touch_x(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetTouchX());
+}
+
+static JSValue rl_get_touch_y(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetTouchY());
+}
+
+static JSValue rl_get_touch_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int index;
+
+	if (JS_ToInt32(ctx, &index, argv[0]))
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Vector2 mousePos = GetMousePosition();
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &mousePos, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+#pragma endregion
+
 // module: shapes
+
 // module: textures
 #pragma region Image/Texture2D data loading/unloading/saving functions
 
@@ -882,6 +1158,7 @@ static JSValue rl_load_render_texture(JSContext *ctx, JSValueConst this_val, int
 }
 
 #pragma endregion
+
 // module: text
 #pragma region Text drawing functions
 
@@ -1061,7 +1338,42 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("setExitKey", 1, rl_set_exit_key),
 
 	#pragma endregion
+	#pragma region Input-related functions: gamepads
 
+	JS_CFUNC_DEF("isGamepadAvailable", 1, rl_is_gamepad_available),
+	JS_CFUNC_DEF("isGamepadName", 2, rl_is_gamepad_name),
+	JS_CFUNC_DEF("getGamepadName", 1, rl_get_gamepad_name),
+	JS_CFUNC_DEF("isGamepadButtonPressed", 2, rl_is_gamepad_button_pressed),
+	JS_CFUNC_DEF("isGamepadButtonDown", 2, rl_is_gamepad_button_pressed),
+	JS_CFUNC_DEF("isGamepadButtonReleased", 2, rl_is_gamepad_button_released),
+	JS_CFUNC_DEF("isGamepadButtonUp", 2, rl_is_gamepad_button_up),
+	JS_CFUNC_DEF("getGamepadButtonPressed", 1, rl_get_gamepad_button_pressed),
+	JS_CFUNC_DEF("getGamepadAxisCount", 1, rl_get_gamepad_axis_count),
+	JS_CFUNC_DEF("getGamepadAxisMovement", 2, rl_get_gamepad_axis_movement),
+
+	#pragma endregion
+	#pragma region Input-related functions: mouse
+
+	JS_CFUNC_DEF("isMouseButtonPressed", 1, rl_is_mouse_button_pressed),
+	JS_CFUNC_DEF("isMouseButtonDown", 1, rl_is_mouse_button_down),
+	JS_CFUNC_DEF("IsMouseButtonReleased", 1, rl_is_mouse_button_released),
+	JS_CFUNC_DEF("isMouseButtonUp", 1, rl_is_mouse_button_up),
+	JS_CFUNC_DEF("getMouseX", 0, rl_get_mouse_x),
+	JS_CFUNC_DEF("getMouseY", 0, rl_get_mouse_y),
+	JS_CFUNC_DEF("getMousePosition", 0, rl_get_mouse_position),
+	JS_CFUNC_DEF("setMousePosition", 2, rl_set_mouse_position),
+	JS_CFUNC_DEF("setMouseOffset", 2, rl_set_mouse_offset),
+	JS_CFUNC_DEF("setMouseScale", 2, rl_set_mouse_scale),
+	JS_CFUNC_DEF("getMouseWheelMove", 2, rl_get_mouse_wheel_move),
+
+	#pragma endregion
+	#pragma region Input-related functions: touch
+
+	JS_CFUNC_DEF("getTouchX", 0, rl_get_touch_x),
+	JS_CFUNC_DEF("getTouchY", 0, rl_get_touch_y),
+	JS_CFUNC_DEF("getTouchPosition", 1, rl_get_touch_position),
+
+	#pragma endregion
 	// module: shapes
 
 	// module: textures
