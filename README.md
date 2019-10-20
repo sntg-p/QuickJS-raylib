@@ -16,8 +16,8 @@
 
 ## Requirements
 - Visual Studio Code (not really necessary if you read the .vscode/tasks.json and know a bit/are willing to learn about C compilers)
-- raylib (download Linux binaries and copy them to `/usr/local/lib/raylib/`)
-- QuickJS (instructions in repo, but I just compiled it and copied the binaries to `/usr/local/bin`)
+- raylib (download Linux binaries and copy them to `/usr/local/lib/`, copy header files to `/usr/local/include/raylib`)
+- QuickJS (instructions in repo, but I just compiled it and copied the binaries to `/usr/local/bin`, and the libraries to `/usr/local/lib/quickjs`)
 - gcc (probably works with another C compilers)
 - Patience, as this is a wip and I'm probably missing lots of things
 
