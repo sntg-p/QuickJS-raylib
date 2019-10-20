@@ -1,4 +1,4 @@
-import * as rlTextures from './textures.js';
+import { ConfigFlag, TraceLogType } from './enums.js'
 import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color } from './qjs-raylib.so.js';
 
 // Window-related functions
@@ -33,36 +33,57 @@ export function disableHidden(): void;
 
 // Drawing-related functions
 /**
- * Clears the background with the color passed as a parameter
+ * Set background color (framebuffer clear color)
  * @param color A color object or an integer in 0xRRGGBBAA form.
  */
 export function clearBackground(color: Color | number): void;
+/** Setup canvas (framebuffer) to start drawing */
 export function beginDrawing(): void;
+/** End canvas drawing and swap buffers (double buffering) */
 export function endDrawing(): void;
+/** Initialize 2D mode with custom camera (2D) */
 export function beginMode2D(camera: Camera2D): void;
+/** Ends 2D mode with custom camera */
 export function endMode2D(): void;
+/** Initializes 3D mode with custom camera (3D) */
 export function beginMode3D(camera: Camera3D): void;
+/** Ends 3D mode and returns to default 2D orthographic mode */
 export function endMode3D(): void;
+/** Initializes render texture for drawing */
 export function beginTextureMode(target: RenderTexture): void;
+/** Ends drawing to render texture */
 export function endTextureMode(): void;
 
 // Screen-space-related functions
+/** Returns a ray trace from mouse position */
 export function getMouseRay(mousePosition: Vector2, camera: Camera2D): Ray;
+/** Returns the screen space position for a 3d world space position */
 export function getWorldToScreen(position: Vector3, camera: Camera2D): Vector2;
+/** Returns camera transform matrix (view matrix) */
 export function getCameraMatrix(camera: Camera2D): Matrix;
 
 // Timing-related functions
+/** Set target FPS (maximum) */
 export function setTargetFps(fps: number): void;
+/** Returns current FPS */
 export function getFps(): number;
+/** Returns time in seconds for last frame drawn */
 export function getFrameTime(): number;
+/** Returns elapsed time in seconds since InitWindow() */
 export function getTime(): number;
 
 // Color-related functions
+/** Returns hexadecimal value for a Color */
 export function colorToInt(color: Color);
+/** Returns color normalized as float [0..1] */
 export function colorNormalize(color: Color);
+/** Returns HSV values for a Color */
 export function colorToHSV(color: Color);
+/** Returns a Color from HSV values */
 export function colorFromHSV(hsv: Vector3);
+/** Returns a Color struct from hexadecimal value */
 export function getColor(value: number);
+/** Color fade-in or fade-out, alpha goes from 0.0f to 1.0f */
 export function fade(color: Color, alpha: number);
 
 // Misc. functions
