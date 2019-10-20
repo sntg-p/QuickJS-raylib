@@ -87,6 +87,16 @@ export const getFileModTime = rl.getFileModTime;
 export const storageSaveValue = rl.storageSaveValue;
 export const storageLoadValue = rl.storageLoadValue;
 
+// Input handling functions
+export const isKeyPressed = rl.isKeyPressed;
+export const isKeyDown = rl.isKeyDown;
+export const isKeyReleased = rl.isKeyReleased;
+export const isKeyUp = rl.isKeyUp;
+export const getKeyPressed = rl.getKeyPressed;
+export const setExitKey = rl.setExitKey;
+
+// Input-related functions: gamepads
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;

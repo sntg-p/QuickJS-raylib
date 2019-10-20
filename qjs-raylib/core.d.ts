@@ -1,4 +1,4 @@
-import { ConfigFlag, TraceLogType } from './enums.js'
+import { ConfigFlag, TraceLogType, KeyboardKey } from './enums.js'
 import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './qjs-raylib.so.js';
 
 // Window-related functions
@@ -105,22 +105,32 @@ export function getRandomValue(min: number, max: number): int;
 export function openURL(url: string): void;
 
 // Files management related functions
-export function fileExists(fileName: string): bool;
-export function isFileExtension(fileName: string, ext: string): bool;
+export function fileExists(fileName: string): boolean;
+export function isFileExtension(fileName: string, ext: string): boolean;
 export function getExtension(fileName: string): string;
 export function getFileName(filePath: string): string;
 export function getFileNameWithoutExt(fileName: string): string;
 export function getDirectoryPath(fileName: string): string;
 export function getWorkingDirectory(): string;
 export function getDirectoryFiles(dirPath: string): string[];
-export function changeDirectory(dir: string): bool;
-export function isFileDropped(): bool;
+export function changeDirectory(dir: string): boolean;
+export function isFileDropped(): boolean;
 export function getDroppedFiles(): string[];
 export function getFileModTime(fileName: string): number;
 
 // Persistent storage management
 export function storageSaveValue(position: number, value: number): void;
 export function storageLoadValue(position: number): number;
+
+// Input-related functions: keyboard
+export function isKeyPressed(key: KeyboardKey): boolean;
+export function isKeyDown(key: KeyboardKey): boolean;
+export function isKeyReleased(key: KeyboardKey): boolean;
+export function isKeyUp(key: KeyboardKey): boolean;
+export function getKeyPressed(): KeyboardKey;
+export function setExitKey(key: KeyboardKey): void;
+
+// Input-related functions: gamepads
 
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;

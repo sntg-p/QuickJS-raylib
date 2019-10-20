@@ -784,6 +784,67 @@ static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int 
 }
 
 #pragma endregion
+// Input handling functions
+#pragma region Input-related functions: keyboard
+
+static JSValue rl_is_key_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int key;
+
+	if (JS_ToInt32(ctx, &key, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsKeyPressed(key));
+}
+
+static JSValue rl_is_key_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int key;
+
+	if (JS_ToInt32(ctx, &key, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsKeyDown(key));
+}
+
+static JSValue rl_is_key_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int key;
+
+	if (JS_ToInt32(ctx, &key, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsKeyReleased(key));
+}
+
+static JSValue rl_is_key_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int key;
+
+	if (JS_ToInt32(ctx, &key, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsKeyUp(key));
+}
+
+static JSValue rl_get_key_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetKeyPressed());
+}
+
+static JSValue rl_set_exit_key(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int key;
+
+	if (JS_ToInt32(ctx, &key, argv[0]))
+		return JS_EXCEPTION;
+
+	SetExitKey(key);
+
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
 // module: shapes
 // module: textures
 #pragma region Image/Texture2D data loading/unloading/saving functions
@@ -986,6 +1047,18 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 
 	JS_CFUNC_DEF("storageSaveValue", 2, rl_storage_save_value),
 	JS_CFUNC_DEF("storageLoadValue", 1, rl_storage_load_value),
+
+	#pragma endregion
+
+	// Input handling functions
+	#pragma region Input-related functions: keyboard
+
+	JS_CFUNC_DEF("isKeyPressed", 1, rl_is_key_pressed),
+	JS_CFUNC_DEF("isKeyDown", 1, rl_is_key_down),
+	JS_CFUNC_DEF("isKeyReleased", 1, rl_is_key_released),
+	JS_CFUNC_DEF("isKeyUp", 1, rl_is_key_up),
+	JS_CFUNC_DEF("getKeyPressed", 0, rl_get_key_pressed),
+	JS_CFUNC_DEF("setExitKey", 1, rl_set_exit_key),
 
 	#pragma endregion
 
