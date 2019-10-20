@@ -102,6 +102,20 @@ export function takeScreenshot(fileName: string);
 /** Returns a random value between min and max (both included) */
 export function getRandomValue(min: number, max: number);
 
+// Files management related functions
+export function fileExists(fileName: string): bool;
+export function isFileExtension(fileName: string, ext: string): bool;
+export function getExtension(fileName: string): string;
+export function getFileName(filePath: string): string;
+export function getFileNameWithoutExt(fileName: string): string;
+export function getDirectoryPath(fileName: string): string;
+export function getWorkingDirectory(): string;
+export function getDirectoryFiles(dirPath: string): string[];
+export function changeDirectory(dir: string): bool;
+export function isFileDropped(): bool;
+export function getDroppedFiles(): string[];
+export function getFileModTime(fileName: string): number;
+
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
 export function drawFps(x: number, y: number): void;

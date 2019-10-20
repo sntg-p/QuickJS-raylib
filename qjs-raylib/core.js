@@ -68,6 +68,20 @@ export const setTraceLogExit = rl.setTraceLogExit;
 export const takeScreenshot = rl.takeScreenshot;
 export const getRandomValue = rl.getRandomValue;
 
+// Files management functions
+export const fileExists = rl.fileExists;
+export const isFileExtension = rl.isFileExtension;
+export const getExtension = rl.getExtension;
+export const getFileName = rl.getFileName;
+export const getFileNameWithoutExt = rl.getFileNameWithoutExt;
+export const getDirectoryPath = rl.getDirectoryPath;
+export const getWorkingDirectory = rl.getWorkingDirectory;
+export const getDirectoryFiles = rl.getDirectoryFiles;
+export const changeDirectory = rl.changeDirectory;
+export const isFileDropped = rl.isFileDropped;
+export const getDroppedFiles = rl.getDroppedFiles;
+export const getFileModTime = rl.getFileModTime;
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;

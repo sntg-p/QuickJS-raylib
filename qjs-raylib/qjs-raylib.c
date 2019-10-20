@@ -622,6 +622,126 @@ static JSValue rl_get_random_value(JSContext *ctx, JSValueConst this_val, int ar
 #pragma endregion
 #pragma region Files management functions
 
+static JSValue rl_file_exists(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, FileExists(fileName));
+}
+
+static JSValue rl_is_file_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	const char* extension = JS_ToCString(ctx, argv[2]);
+	if (extension == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsFileExtension(fileName, extension));
+}
+
+static JSValue rl_get_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewString(ctx, GetExtension(fileName));
+}
+
+static JSValue rl_get_file_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* filePath = JS_ToCString(ctx, argv[0]);
+	if (filePath == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewString(ctx, GetFileName(filePath));
+}
+
+static JSValue rl_get_file_name_without_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* filePath = JS_ToCString(ctx, argv[0]);
+	if (filePath == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewString(ctx, GetFileNameWithoutExt(filePath));
+}
+
+static JSValue rl_get_directory_path(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewString(ctx, GetDirectoryPath(fileName));
+}
+
+static JSValue rl_get_working_directory(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewString(ctx, GetWorkingDirectory());
+}
+
+static JSValue rl_get_directory_files(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* dirPath = JS_ToCString(ctx, argv[0]);
+	if (dirPath == NULL)
+		return JS_EXCEPTION;
+
+	int count;
+	char** files = GetDirectoryFiles(dirPath, &count);
+
+	JSValue arr = JS_NewArray(ctx);
+
+	for (int i = 0; i < count; i++)
+		JS_SetPropertyInt64(ctx, arr, i, JS_NewString(ctx, files[i]));
+
+	ClearDirectoryFiles();
+
+	return arr;
+}
+
+static JSValue rl_change_directory(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* dir = JS_ToCString(ctx, argv[0]);
+	if (dir == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, ChangeDirectory(dir));
+}
+
+static JSValue rl_is_file_dropped(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewBool(ctx, IsFileDropped());
+}
+
+static JSValue rl_get_dropped_files(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int count;
+	char** files = GetDroppedFiles(&count);
+
+	JSValue arr = JS_NewArray(ctx);
+
+	for (int i = 0; i < count; i++)
+		JS_SetPropertyInt64(ctx, arr, i, JS_NewString(ctx, files[i]));
+
+	ClearDroppedFiles();
+
+	return arr;
+}
+
+static JSValue rl_get_file_mod_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	const char* fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	return JS_NewInt64(ctx, GetFileModTime(fileName));
+}
+
 #pragma endregion
 #pragma region Persistent storage management
 
@@ -807,7 +927,22 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getRandomValue", 2, rl_get_random_value),
 
 	#pragma endregion
-	// Files management functions
+	#pragma region Files management functions
+
+	JS_CFUNC_DEF("fileExists", 1, rl_file_exists),
+	JS_CFUNC_DEF("isFileExtension", 2, rl_is_file_extension),
+	JS_CFUNC_DEF("getExtension", 1, rl_get_extension),
+	JS_CFUNC_DEF("getFileName", 1, rl_get_file_name),
+	JS_CFUNC_DEF("getFileNameWithoutExt", 1, rl_get_file_name_without_extension),
+	JS_CFUNC_DEF("getDirectoryPath", 1, rl_get_directory_path),
+	JS_CFUNC_DEF("getWorkingDirectory", 0, rl_get_working_directory),
+	JS_CFUNC_DEF("getDirectoryFiles", 1, rl_get_directory_files),
+	JS_CFUNC_DEF("changeDirectory", 1, rl_change_directory),
+	JS_CFUNC_DEF("isFileDropped", 0, rl_is_file_dropped),
+	JS_CFUNC_DEF("getDroppedFiles", 0, rl_get_dropped_files),
+	JS_CFUNC_DEF("getFileModTime", 1, rl_get_file_mod_time),
+
+	#pragma endregion
 	// Persistent storage management
 
 	// module: shapes
