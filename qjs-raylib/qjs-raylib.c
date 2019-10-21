@@ -1864,14 +1864,14 @@ static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSV
 		return JS_EXCEPTION;
 
 	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
-	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
 
 	DrawPoly(center, sides, radius, rotation, color);
 	
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_shapes_texture(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
 	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
@@ -2193,6 +2193,8 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("drawTriangle", 4, rl_draw_triangle),
 	JS_CFUNC_DEF("drawTriangleLines", 4, rl_draw_triangle_lines),
 	JS_CFUNC_DEF("drawTriangleFan", 2, rl_draw_triangle_fan),
+	JS_CFUNC_DEF("drawPoly", 5, rl_draw_poly),
+	JS_CFUNC_DEF("setShapesTexture", 2, rl_set_shapes_texture),
 
 	#pragma endregion
 
