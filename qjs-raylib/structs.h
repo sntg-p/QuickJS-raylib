@@ -2127,6 +2127,199 @@ static void js_rl_init_color_class(JSContext *ctx, JSModuleDef *m)
 }
 
 #pragma endregion
+#pragma region Rectangle
+
+static JSClassID js_rl_rectangle_class_id;
+
+static JSClassDef js_rl_rectangle_class = {"Rectangle"};
+
+static JSValue js_rl_rectangle_get_x(JSContext *ctx, JSValueConst this_val)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (p)
+		return JS_NewFloat64(ctx, p->x);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_rectangle_set_x(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	double value;
+
+	if (JS_ToFloat64(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->x = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_rectangle_get_y(JSContext *ctx, JSValueConst this_val)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (p)
+		return JS_NewFloat64(ctx, p->y);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_rectangle_set_y(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	double value;
+
+	if (JS_ToFloat64(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->y = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_rectangle_get_width(JSContext *ctx, JSValueConst this_val)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (p)
+		return JS_NewFloat64(ctx, p->width);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_rectangle_set_width(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	double value;
+
+	if (JS_ToFloat64(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->width = value;
+
+	return JS_UNDEFINED;
+}
+
+static JSValue js_rl_rectangle_get_height(JSContext *ctx, JSValueConst this_val)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (p)
+		return JS_NewFloat64(ctx, p->height);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_rectangle_set_height(JSContext *ctx, JSValueConst this_val, JSValueConst v)
+{
+	Rectangle *p = (Rectangle *)JS_GetOpaque2(ctx, this_val, js_rl_rectangle_class_id);
+
+	if (!p)
+		return JS_EXCEPTION;
+
+	if (JS_IsUndefined(this_val) || JS_IsNull(this_val))
+		return JS_UNDEFINED;
+	if (JS_IsNull(v))
+		return JS_UNDEFINED;
+
+	double value;
+
+	if (JS_ToFloat64(ctx, &value, v))
+		return JS_EXCEPTION;
+
+	p->height = value;
+
+	return JS_UNDEFINED;
+}
+
+static const JSCFunctionListEntry js_rl_rectangle_proto_funcs[] = {
+		JS_CGETSET_DEF("x", js_rl_rectangle_get_x, js_rl_rectangle_set_x),
+		JS_CGETSET_DEF("y", js_rl_rectangle_get_y, js_rl_rectangle_set_y),
+		JS_CGETSET_DEF("width", js_rl_rectangle_get_width, js_rl_rectangle_set_width),
+		JS_CGETSET_DEF("height", js_rl_rectangle_get_height, js_rl_rectangle_set_height),
+};
+
+static JSValue js_rl_new_rectangle(JSContext *ctx, double x, double y, double w, double h)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_rectangle_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Rectangle *p = js_mallocz(ctx, sizeof(Rectangle));
+
+	p->x = x;
+	p->y = y;
+	p->width = w;
+	p->height = h;
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue js_rl_rectangle_constructor(JSContext *ctx, JSValueConst new_target, int argc, JSValueConst *argv)
+{
+	double x, y, w, h;
+
+	if (JS_ToFloat64(ctx, &x, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &y, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &w, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &h, argv[3]))
+		return JS_EXCEPTION;
+
+	return js_rl_new_rectangle(ctx, x, y, w, h);
+}
+
+static void js_rl_init_rectangle_class(JSContext *ctx, JSModuleDef *m)
+{
+	JSValue proto, obj;
+	JS_NewClassID(&js_rl_rectangle_class_id);
+	JS_NewClass(JS_GetRuntime(ctx), js_rl_rectangle_class_id, &js_rl_rectangle_class);
+	proto = JS_NewObject(ctx);
+	JS_SetPropertyFunctionList(ctx, proto, js_rl_rectangle_proto_funcs, countof(js_rl_rectangle_proto_funcs));
+	JS_SetClassProto(ctx, js_rl_rectangle_class_id, proto);
+
+	obj = JS_NewCFunction2(ctx, js_rl_rectangle_constructor, "Rectangle", 4, JS_CFUNC_constructor_or_func, 0);
+	JS_SetModuleExport(ctx, m, "Rectangle", obj);
+}
+
+#pragma endregion
 
 static void js_rl_init_classes(JSContext *ctx, JSModuleDef *m)
 {
@@ -2141,6 +2334,7 @@ static void js_rl_init_classes(JSContext *ctx, JSModuleDef *m)
 	js_rl_init_ray_class(ctx, m);
 	js_rl_init_color_class(ctx, m);
 	js_rl_init_matrix_class(ctx, m);
+	js_rl_init_rectangle_class(ctx, m);
 }
 
 static void js_rl_init_module_classes(JSContext *ctx, JSModuleDef *m)
@@ -2155,4 +2349,5 @@ static void js_rl_init_module_classes(JSContext *ctx, JSModuleDef *m)
 	JS_AddModuleExport(ctx, m, "Ray");
 	JS_AddModuleExport(ctx, m, "Color");
 	JS_AddModuleExport(ctx, m, "Matrix");
+	JS_AddModuleExport(ctx, m, "Rectangle");
 }

@@ -7,6 +7,8 @@
 
 #include "structs.h"
 
+#define JS_ATOM_length 48
+
 // module: core
 #pragma region Window-related functions
 
@@ -1291,6 +1293,598 @@ static JSValue rl_set_camera_move_controls(JSContext *ctx, JSValueConst this_val
 #pragma endregion
 
 // module: shapes
+#pragma region Basic shapes drawing functions
+
+static JSValue rl_draw_pixel(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int posX, posY;
+
+	if (JS_ToInt32(ctx, &posX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &posY, argv[1]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	DrawPixel(posX, posY, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_pixel_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 position = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+
+	DrawPixelV(position, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_line(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int startPosX, startPosY, endPosX, endPosY;
+
+	if (JS_ToInt32(ctx, &startPosX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &startPosY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endPosX, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endPosY, argv[3]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	DrawLine(startPosX, startPosY, endPosX, endPosY, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_line_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	DrawLineV(startPos, endPos, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_line_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+
+	double thick;
+
+	if (JS_ToFloat64(ctx, &thick, argv[2]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawLineEx(startPos, endPos, thick, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_line_bezier(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+
+	double thick;
+
+	if (JS_ToFloat64(ctx, &thick, argv[2]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawLineBezier(startPos, endPos, thick, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_line_strip(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue len_val = JS_GetProperty(ctx, argv[0], JS_ATOM_length);
+	if (JS_IsException(len_val))
+		return JS_EXCEPTION;
+	
+	int numPoints;
+
+	if (JS_ToInt32(ctx, &numPoints, len_val))
+		return JS_EXCEPTION;
+
+	Vector2 points[numPoints];
+
+	for (int i = 0; i < numPoints; i++)
+	{
+		JSValue value = JS_GetPropertyUint32(ctx, argv[0], i);
+		points[i] = *(Vector2*)JS_GetOpaque2(ctx, value, js_rl_vector2_class_id);
+	}
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+	DrawLineStrip(points, numPoints, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int centerX, centerY;
+	double radius;
+
+	if (JS_ToInt32(ctx, &centerX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &centerY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &radius, argv[2]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawCircle(centerX, centerY, radius, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int centerX, centerY;
+	double radius;
+
+	if (JS_ToInt32(ctx, &centerX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &centerY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &radius, argv[2]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawCircleLines(centerX, centerY, radius, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_sector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double radius;
+	int startAngle, endAngle, segments;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &startAngle, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endAngle, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[4]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	DrawCircleSector(center, radius, startAngle, endAngle, segments, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_sector_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double radius;
+	int startAngle, endAngle, segments;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &startAngle, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endAngle, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[4]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	DrawCircleSectorLines(center, radius, startAngle, endAngle, segments, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_gradient(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int centerX, centerY;
+	double radius;
+
+	if (JS_ToInt32(ctx, &centerX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &centerY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &radius, argv[2]))
+		return JS_EXCEPTION;
+
+	Color color1 = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+	Color color2 = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	DrawCircleGradient(centerX, centerY, radius, color1, color2);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	DrawCircleV(center, radius, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_ring(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double innerRadius, outerRadius;
+	int startAngle, endAngle, segments;
+
+	if (JS_ToFloat64(ctx, &innerRadius, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &outerRadius, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &startAngle, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endAngle, argv[4]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[5]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[6], js_rl_color_class_id);
+
+	DrawRing(center, innerRadius, outerRadius, startAngle, endAngle, segments, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_ring_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double innerRadius, outerRadius;
+	int startAngle, endAngle, segments;
+
+	if (JS_ToFloat64(ctx, &innerRadius, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &outerRadius, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &startAngle, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &endAngle, argv[4]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[5]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[6], js_rl_color_class_id);
+
+	DrawRingLines(center, innerRadius, outerRadius, startAngle, endAngle, segments, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int posX, posY, width, height;
+
+	if (JS_ToInt32(ctx, &posX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &posY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &width, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	DrawRectangle(posX, posY, width, height, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 position = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 size = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	DrawRectangleV(position, size, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+
+	DrawRectangleRec(rect, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_pro(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double rotation;
+
+	if (JS_ToInt32(ctx, &rotation, argv[2]))
+		return JS_EXCEPTION;
+
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Vector2 origin = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawRectanglePro(rect, origin, rotation, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_gradient_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int posX, posY, width, height;
+
+	if (JS_ToInt32(ctx, &posX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &posY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &width, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	Color color1 = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+	Color color2 = *(Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	DrawRectangleGradientV(posX, posY, width, height, color1, color2);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_gradient_h(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int posX, posY, width, height;
+
+	if (JS_ToInt32(ctx, &posX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &posY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &width, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	Color color1 = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+	Color color2 = *(Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	DrawRectangleGradientH(posX, posY, width, height, color1, color2);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_gradient_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
+	Color color1 = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+	Color color2 = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+	Color color3 = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+	Color color4 = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	DrawRectangleGradientEx(rect, color1, color2, color3, color4);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int posX, posY, width, height;
+
+	if (JS_ToInt32(ctx, &posX, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &posY, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &width, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	DrawRectangleLines(posX, posY, width, height, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_lines_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int lineThick;
+
+	if (JS_ToInt32(ctx, &lineThick, argv[1]))
+		return JS_EXCEPTION;
+
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	DrawRectangleLinesEx(rect, lineThick, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_rounded(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double roundness;
+	int segments;
+
+	if (JS_ToFloat64(ctx, &roundness, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[2]))
+		return JS_EXCEPTION;
+
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawRectangleRounded(rect, roundness, segments, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_rectangle_rounded_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double roundness;
+	int segments, lineThick;
+
+	if (JS_ToFloat64(ctx, &roundness, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &segments, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &lineThick, argv[3]))
+		return JS_EXCEPTION;
+
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawRectangleRoundedLines(rect, roundness, segments, lineThick, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_triangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 v1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 v2 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Vector2 v3 = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawTriangle(v1, v2, v3, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_triangle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 v1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 v2 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Vector2 v3 = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawTriangleLines(v1, v2, v3, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_triangle_fan(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue len_val = JS_GetProperty(ctx, argv[0], JS_ATOM_length);
+	if (JS_IsException(len_val))
+		return JS_EXCEPTION;
+	
+	int numPoints;
+
+	if (JS_ToInt32(ctx, &numPoints, len_val))
+		return JS_EXCEPTION;
+
+	Vector2 points[numPoints];
+
+	for (int i = 0; i < numPoints; i++)
+	{
+		JSValue value = JS_GetPropertyUint32(ctx, argv[0], i);
+		points[i] = *(Vector2*)JS_GetOpaque2(ctx, value, js_rl_vector2_class_id);
+	}
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+	DrawTriangleFan(points, numPoints, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	double radius, rotation;
+	int sides;
+
+	if (JS_ToInt32(ctx, &sides, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &radius, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &rotation, argv[3]))
+		return JS_EXCEPTION;
+
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[3], js_rl_color_class_id);
+
+	DrawPoly(center, sides, radius, rotation, color);
+	
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
+	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
+
+	SetShapesTexture(texture, rect);
+	
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
+#pragma region Basic shapes collision detection functions
+
+#pragma endregion
 
 // module: textures
 #pragma region Image/Texture2D data loading/unloading/saving functions
@@ -1496,8 +2090,6 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("storageLoadValue", 1, rl_storage_load_value),
 
 	#pragma endregion
-
-	// Input handling functions
 	#pragma region Input-related functions: keyboard
 
 	JS_CFUNC_DEF("isKeyPressed", 1, rl_is_key_pressed),
@@ -1569,6 +2161,40 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	#pragma endregion
 
 	// module: shapes
+	#pragma region Basic shapes drawing functions
+
+	JS_CFUNC_DEF("drawPixel", 3, rl_draw_pixel),
+	JS_CFUNC_DEF("drawPixelV", 2, rl_draw_pixel_v),
+	JS_CFUNC_DEF("drawLine", 5, rl_draw_line),
+	JS_CFUNC_DEF("drawLineV", 3, rl_draw_line_v),
+	JS_CFUNC_DEF("drawLineEx", 4, rl_draw_line_ex),
+	JS_CFUNC_DEF("drawLineBezier", 4, rl_draw_line_bezier),
+	JS_CFUNC_DEF("drawLineStrip", 2, rl_draw_line_strip),
+
+	JS_CFUNC_DEF("drawCircle", 4, rl_draw_circle),
+	JS_CFUNC_DEF("drawCircleLines", 4, rl_draw_circle_lines),
+	JS_CFUNC_DEF("drawCircleSector", 6, rl_draw_circle_sector),
+	JS_CFUNC_DEF("drawCircleSectorLines", 6, rl_draw_circle_sector_lines),
+	JS_CFUNC_DEF("drawCircleGradient", 5, rl_draw_circle_gradient),
+	JS_CFUNC_DEF("drawCircleV", 4, rl_draw_circle_v),
+	JS_CFUNC_DEF("drawRing", 7, rl_draw_ring),
+	JS_CFUNC_DEF("drawRingLines", 7, rl_draw_ring_lines),
+	JS_CFUNC_DEF("drawRectangle", 5, rl_draw_rectangle),
+	JS_CFUNC_DEF("drawRectangleV", 3, rl_draw_rectangle_v),
+	JS_CFUNC_DEF("drawRectangleRec", 2, rl_draw_rectangle_rec),
+	JS_CFUNC_DEF("drawRectanglePro", 4, rl_draw_rectangle_pro),
+	JS_CFUNC_DEF("drawRectangleGradientV", 6, rl_draw_rectangle_gradient_v),
+	JS_CFUNC_DEF("drawRectangleGradientH", 6, rl_draw_rectangle_gradient_h),
+	JS_CFUNC_DEF("drawRectangleGradientEx", 5, rl_draw_rectangle_gradient_ex),
+	JS_CFUNC_DEF("drawRectangleLines", 5, rl_draw_rectangle_lines),
+	JS_CFUNC_DEF("drawRectangleLinesEx", 3, rl_draw_rectangle_lines_ex),
+	JS_CFUNC_DEF("drawRectangleRounded", 4, rl_draw_rectangle_rounded),
+	JS_CFUNC_DEF("drawRectangleRoundedLines", 5, rl_draw_rectangle_rounded_lines),
+	JS_CFUNC_DEF("drawTriangle", 4, rl_draw_triangle),
+	JS_CFUNC_DEF("drawTriangleLines", 4, rl_draw_triangle_lines),
+	JS_CFUNC_DEF("drawTriangleFan", 2, rl_draw_triangle_fan),
+
+	#pragma endregion
 
 	// module: textures
 	#pragma region Image/Texture2D data loading/unloading/saving functions
