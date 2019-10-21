@@ -5,27 +5,28 @@
 **QuickJS + raylib** consists in a module for QuickJS that enables you to use raylib from JavaScript and run your game with native performance.
 
 ## Progress
-[-] Exposing functionality
-	[x] Core module
-	[ ] Shapes module
-	[ ] Textures module
-	[ ] Text module
-	[ ] Models module
-	[ ] Shaders module
-	[ ] Audio module
-	[ ] Structs
-		[x] Vectors, Quaternion, Matrix and Color
-		[x] Image, Texure and Render texture
-		[x] Camera2D, Camera3D, Ray
-		[ ] Everything else has not been currently implemented
-[-] Testing
-	[-] Core module
-	[ ] Shapes module
-	[ ] Textures module
-	[ ] Text module
-	[ ] Models module
-	[ ] Shaders module
-	[ ] Audio module
+- [ ] Exposing functionality
+	- [x] Core module
+	- [ ] Shapes module
+	- [ ] Textures module
+	- [ ] Text module
+	- [ ] Models module
+	- [ ] Shaders module
+	- [ ] Audio module
+	- [ ] Structs
+		- [x] Vectors, Quaternion, Matrix and Color
+		- [x] Image, Texure and Render texture
+		- [x] Camera2D, Camera3D, Ray
+		- [ ] Everything else has not been currently implemented
+- [ ] Testing
+	- [ ] Core module
+		- Some testing has been made
+	- [ ] Shapes module
+	- [ ] Textures module
+	- [ ] Text module
+	- [ ] Models module
+	- [ ] Shaders module
+	- [ ] Audio module
 
 ## Disclaimer
 - The idea is to make this user friendly. However, this takes time.
