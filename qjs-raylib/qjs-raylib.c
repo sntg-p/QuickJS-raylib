@@ -2106,7 +2106,7 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("isGamepadName", 2, rl_is_gamepad_name),
 	JS_CFUNC_DEF("getGamepadName", 1, rl_get_gamepad_name),
 	JS_CFUNC_DEF("isGamepadButtonPressed", 2, rl_is_gamepad_button_pressed),
-	JS_CFUNC_DEF("isGamepadButtonDown", 2, rl_is_gamepad_button_pressed),
+	JS_CFUNC_DEF("isGamepadButtonDown", 2, rl_is_gamepad_button_down),
 	JS_CFUNC_DEF("isGamepadButtonReleased", 2, rl_is_gamepad_button_released),
 	JS_CFUNC_DEF("isGamepadButtonUp", 2, rl_is_gamepad_button_up),
 	JS_CFUNC_DEF("getGamepadButtonPressed", 1, rl_get_gamepad_button_pressed),
