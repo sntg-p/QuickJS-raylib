@@ -1648,7 +1648,7 @@ static JSValue rl_draw_rectangle_pro(JSContext *ctx, JSValueConst this_val, int 
 {
 	double rotation;
 
-	if (JS_ToInt32(ctx, &rotation, argv[2]))
+	if (JS_ToFloat64(ctx, &rotation, argv[2]))
 		return JS_EXCEPTION;
 
 	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
