@@ -1119,6 +1119,179 @@ static JSValue rl_get_touch_position(JSContext *ctx, JSValueConst this_val, int 
 }
 
 #pragma endregion
+#pragma region Gestures and Touch Handling Functions
+
+static JSValue rl_set_gestures_enabled(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	unsigned int flags;
+
+	if (JS_ToInt32(ctx, &flags, argv[0]))
+		return JS_EXCEPTION;
+
+	SetGesturesEnabled(flags);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_is_gesture_detected(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int gesture;
+
+	if (JS_ToInt32(ctx, &gesture, argv[0]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, IsGestureDetected(gesture));
+}
+
+static JSValue rl_get_gesture_detected(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetGestureDetected());
+}
+
+static JSValue rl_get_touch_points_count(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewInt32(ctx, GetTouchPointsCount());
+}
+
+static JSValue rl_get_gesture_hold_duration(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewFloat64(ctx, GetGestureHoldDuration());
+}
+
+static JSValue rl_get_gesture_drag_vector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Vector2 dragVector = GetGestureDragVector();
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &dragVector, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_gesture_drag_angle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewFloat64(ctx, GetGestureDragAngle());
+}
+
+static JSValue rl_get_gesture_pinch_vector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Vector2 pinchVector = GetGestureDragVector();
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	memcpy(p, &pinchVector, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_gesture_pinch_angle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	return JS_NewFloat64(ctx, GetGesturePinchAngle());
+}
+
+#pragma endregion
+#pragma region Camera System Functions
+
+static JSValue rl_set_camera_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int mode;
+
+	if (JS_ToInt32(ctx, &mode, argv[1]))
+		return JS_EXCEPTION;
+
+	Camera camera = *(Camera*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
+
+	SetCameraMode(camera, mode);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_update_camera(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Camera* camera = (Camera*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
+	UpdateCamera(camera);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_camera_pan_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int panKey;
+
+	if (JS_ToInt32(ctx, &panKey, argv[0]))
+		return JS_EXCEPTION;
+
+	SetCameraPanControl(panKey);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_camera_alt_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int altKey;
+
+	if (JS_ToInt32(ctx, &altKey, argv[0]))
+		return JS_EXCEPTION;
+
+	SetCameraAltControl(altKey);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_camera_smooth_zoom_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int szKey;
+
+	if (JS_ToInt32(ctx, &szKey, argv[0]))
+		return JS_EXCEPTION;
+
+	SetCameraSmoothZoomControl(szKey);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_set_camera_move_controls(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	int frontKey, backKey, rightKey, leftKey, upKey, downKey;
+
+	if (JS_ToInt32(ctx, &frontKey, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &backKey, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &rightKey, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &leftKey, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &upKey, argv[4]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &downKey, argv[5]))
+		return JS_EXCEPTION;
+
+	SetCameraMoveControls(frontKey, backKey, rightKey, leftKey, upKey, downKey);
+
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
 
 // module: shapes
 
@@ -1374,6 +1547,30 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("getTouchPosition", 1, rl_get_touch_position),
 
 	#pragma endregion
+	#pragma region Gestures and Touch Handling Functions
+
+	JS_CFUNC_DEF("setGesturesEnabled", 1, rl_set_gestures_enabled),
+	JS_CFUNC_DEF("isGestureDetected", 1, rl_is_gesture_detected),
+	JS_CFUNC_DEF("getGestureDetected", 0, rl_get_gesture_detected),
+	JS_CFUNC_DEF("getTouchPointsCount", 0, rl_get_touch_points_count),
+	JS_CFUNC_DEF("getGestureHoldDuration", 0, rl_get_gesture_hold_duration),
+	JS_CFUNC_DEF("getGestureDragVector", 0, rl_get_gesture_drag_vector),
+	JS_CFUNC_DEF("getGestureDragAngle", 0, rl_get_gesture_drag_angle),
+	JS_CFUNC_DEF("getGesturePinchVector", 0, rl_get_gesture_pinch_vector),
+	JS_CFUNC_DEF("getGesturePinchAngle", 0, rl_get_gesture_pinch_angle),
+
+	#pragma endregion
+	#pragma region Camera System Functions
+
+	JS_CFUNC_DEF("setCameraMode", 2, rl_set_camera_mode),
+	JS_CFUNC_DEF("updateCamera", 1, rl_update_camera),
+	JS_CFUNC_DEF("setCameraPanControl", 1, rl_set_camera_pan_control),
+	JS_CFUNC_DEF("setCameraAltControl", 1, rl_set_camera_alt_control),
+	JS_CFUNC_DEF("setCameraSmoothZoomControl", 1, rl_set_camera_smooth_zoom_control),
+	JS_CFUNC_DEF("setCameraMoveControls", 6, rl_set_camera_move_controls),
+
+	#pragma endregion
+
 	// module: shapes
 
 	// module: textures

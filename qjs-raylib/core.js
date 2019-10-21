@@ -124,6 +124,25 @@ export const getTouchX = rl.getTouchX;
 export const getTouchY = rl.getTouchY;
 export const getTouchPosition = rl.getTouchPosition;
 
+// Gestures and Touch Handling Functions
+export const setGesturesEnabled = rl.setGesturesEnabled;
+export const isGestureDetected = rl.isGestureDetected;
+export const getGestureDetected = rl.getGestureDetected;
+export const getTouchPointsCount = rl.getTouchPointsCount;
+export const getGestureHoldDuration = rl.getGestureHoldDuration;
+export const getGestureDragVector = rl.getGestureDragVector;
+export const getGestureDragAngle = rl.getGestureDragAngle;
+export const getGesturePinchVector = rl.getGesturePinchVector;
+export const getGesturePinchAngle = rl.getGesturePinchAngle;
+
+// Camera System Functions
+export const setCameraMode = rl.setCameraMode;
+export const updateCamera = rl.updateCamera;
+export const setCameraPanControl = rl.setCameraPanControl;
+export const setCameraAltControl = rl.setCameraAltControl;
+export const setCameraSmoothZoomControl = rl.setCameraSmoothZoomControl;
+export const setCameraMoveControls = rl.setCameraMoveControls;
+
 // asd
 export const drawText = rl.drawText;
 export const drawFps = rl.drawFps;

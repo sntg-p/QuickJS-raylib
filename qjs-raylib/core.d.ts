@@ -159,6 +159,25 @@ export function getTouchX(): number;
 export function getTouchY(): number;
 export function getTouchPosition(index: number): Vector2;
 
+// Gestures and Touch Handling Functions
+export function setGesturesEnabled(flags: number): void;
+export function isGestureDetected(gesture: number): boolean;
+export function getGestureDetected(): number;
+export function getTouchPointsCount(): number;
+export function getGestureHoldDuration(): number;
+export function getGestureDragVector(): Vector2;
+export function getGestureDragAngle(): number;
+export function getGesturePinchVector(): Vector2;
+export function getGesturePinchAngle(): number;
+
+// Camera System Functions
+export function setCameraMode(camera: Camera3D, mode: number): void;
+export function updateCamera(camera: Camera3D): void;
+export function setCameraPanControl(panKey: number): void;
+export function setCameraAltControl(altKey: number): void;
+export function setCameraSmoothZoomControl(szKey: number): void;
+export function setCameraMoveControls(frontKey: number, backKey: number, rightKey: number, leftKey: number, upKey: number, downKey: number): void;
+
 // Text drawing functions
 export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
 export function drawFps(x: number, y: number): void;
