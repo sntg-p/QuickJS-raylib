@@ -778,9 +778,7 @@ static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int 
 	if (JS_ToInt32(ctx, &position, argv[0]))
 		return JS_EXCEPTION;
 
-	int value = StorageLoadValue(position);
-
-	return JS_UNDEFINED;
+	return JS_NewInt32(ctx, StorageLoadValue(position));
 }
 
 #pragma endregion
