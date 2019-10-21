@@ -782,7 +782,6 @@ static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int 
 }
 
 #pragma endregion
-// Input handling functions
 #pragma region Input-related functions: keyboard
 
 static JSValue rl_is_key_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -1123,7 +1122,7 @@ static JSValue rl_set_gestures_enabled(JSContext *ctx, JSValueConst this_val, in
 {
 	unsigned int flags;
 
-	if (JS_ToInt32(ctx, &flags, argv[0]))
+	if (JS_ToUint32(ctx, &flags, argv[0]))
 		return JS_EXCEPTION;
 
 	SetGesturesEnabled(flags);
