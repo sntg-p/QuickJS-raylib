@@ -2004,9 +2004,380 @@ static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JS
 	return obj;
 }
 
-static JSValue rl_load_render_texture(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_load_image_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	int width, height, amount;
+
+	if (JS_ToInt32(ctx, &width, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[2]))
+		return JS_EXCEPTION;
+
+	amount = width * height;
+	Color* pixels = js_mallocz(ctx, sizeof(Color) * amount);
+
+	for (int i = 0; i < amount; i++)
+	{
+		JSValue color = JS_GetPropertyUint32(ctx, argv[0], i);
+		pixels[i] = *(Color*)JS_GetOpaque2(ctx, color, js_rl_color_class_id);
+	}
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Image image = LoadImageEx(pixels, width, height);
+	memcpy(p, &image, sizeof(Image));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_image_pro(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	return JS_ThrowNotImplemented(ctx);
+
+	int width, height, format, amount;
+
+	if (JS_ToInt32(ctx, &width, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &format, argv[3]))
+		return JS_EXCEPTION;
+
+	amount = width * height;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	// Image image = LoadImagePro(pixels, width, height);
+	// memcpy(p, &image, sizeof(Image));
+	// JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_image_raw(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* fileName = NULL;
+
+	fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	int width, height, format, headerSize;
+
+	if (JS_ToInt32(ctx, &width, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &format, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &headerSize, argv[3]))
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Image image = LoadImageRaw(fileName, width, height, format, headerSize);
+	memcpy(p, &image, sizeof(Image));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_export_image(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+
+	const char* fileName = NULL;
+
+	fileName = JS_ToCString(ctx, argv[1]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	ExportImage(image, fileName);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_export_image_as_code(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+
+	const char* fileName = NULL;
+
+	fileName = JS_ToCString(ctx, argv[1]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	ExportImageAsCode(image, fileName);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_load_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* fileName = NULL;
+
+	fileName = JS_ToCString(ctx, argv[0]);
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_texture2d_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Texture2D* p = js_mallocz(ctx, sizeof(Texture2D));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Texture2D texture = LoadTexture(fileName);
+	memcpy(p, &texture, sizeof(Image));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_texture_from_image(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_texture2d_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Texture2D* p = js_mallocz(ctx, sizeof(Texture2D));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+	Texture2D texture = LoadTextureFromImage(image);
+	memcpy(p, &texture, sizeof(Image));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_texture_cubemap(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+
+	int layoutType;
+
+	if (JS_ToInt32(ctx, &layoutType, argv[1]))
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_texture2d_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Texture2D* p = js_mallocz(ctx, sizeof(Texture2D));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Texture2D texture = LoadTextureCubemap(image, layoutType);
+	memcpy(p, &texture, sizeof(Image));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_render_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return js_rl_render_texture_constructor(ctx, JS_UNDEFINED, argc, argv);
+}
+
+static JSValue rl_unload_image(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+	UnloadImage(image);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_unload_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
+	UnloadTexture(texture);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_unload_render_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	RenderTexture2D texture = *(RenderTexture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_render_texture_class_id);
+	UnloadRenderTexture(texture);
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_get_image_data(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+	Color* pixels = GetImageData(image);
+
+	int count = image.width * image.height;
+
+	JSValue arr = JS_NewArray(ctx);
+
+	for (int i = 0; i < count; i++)
+	{
+		JSValue obj = JS_NewObjectClass(ctx, js_rl_color_class_id);
+		Color* pixel = js_mallocz(ctx, sizeof(Color));
+		memcpy(pixel, pixels + i, sizeof(Color));
+		JS_SetOpaque(obj, pixel);
+		JS_SetPropertyInt64(ctx, arr, i, obj);
+	}
+
+	return arr;
+}
+
+static JSValue rl_get_image_data_normalized(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+	Vector4* pixels = GetImageData(image);
+
+	int count = image.width * image.height;
+
+	JSValue arr = JS_NewArray(ctx);
+
+	for (int i = 0; i < count; i++)
+	{
+		JSValue obj = JS_NewObjectClass(ctx, js_rl_vector4_class_id);
+		Vector4* pixel = js_mallocz(ctx, sizeof(Vector4));
+		memcpy(pixel, pixels + i, sizeof(Vector4));
+		JS_SetOpaque(obj, pixel);
+		JS_SetPropertyInt64(ctx, arr, i, obj);
+	}
+
+	return arr;
+}
+
+static JSValue rl_get_pixel_data_size(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	int width, height, format;
+
+	if (JS_ToInt32(ctx, &width, argv[0]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &height, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &format, argv[2]))
+		return JS_EXCEPTION;
+
+	return JS_NewInt32(ctx, GetPixelDataSize(width, height, format));
+}
+
+static JSValue rl_get_texture_data(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
+	Image image = GetTextureData(texture);
+	memcpy(p, &image, sizeof(Image));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_screen_data(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+	if (JS_IsException(obj))
+		return obj;
+
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Image image = GetScreenData();
+	memcpy(p, &image, sizeof(Image));
+
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_update_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
+
+	int count = texture.width * texture.height;
+	unsigned char* pixels = js_mallocz(ctx, sizeof(unsigned char) * count);
+
+	JSValue arr = JS_NewArray(ctx);
+
+	for (int i = 0; i < count; i++)
+	{
+		JSValue obj = JS_GetPropertyUint32(ctx, argv[1], i);
+		unsigned char pixel;
+		if (JS_ToInt32(ctx, &pixel, obj))
+			return JS_EXCEPTION;
+		pixels[i] = pixel;
+	}
+
+	UpdateTexture(texture, pixels);
+
+	return JS_UNDEFINED;
 }
 
 #pragma endregion
@@ -2299,8 +2670,27 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 
 	// module: textures
 	#pragma region Image/Texture2D data loading/unloading/saving functions
+
 	JS_CFUNC_DEF("loadImage", 1, rl_load_image),
+	JS_CFUNC_DEF("loadImageEx", 3, rl_load_image_ex),
+	JS_CFUNC_DEF("loadImagePro", 4, rl_load_image_pro),
+	JS_CFUNC_DEF("loadImageRaw", 5, rl_load_image_raw),
+	JS_CFUNC_DEF("exportImage", 2, rl_export_image),
+	JS_CFUNC_DEF("exportImageAsCode", 2, rl_export_image_as_code),
+	JS_CFUNC_DEF("loadTexture", 1, rl_load_texture),
+	JS_CFUNC_DEF("loadTextureFromImage", 1, rl_load_texture_from_image),
+	JS_CFUNC_DEF("loadTextureCubemap", 2, rl_load_texture_cubemap),
 	JS_CFUNC_DEF("loadRenderTexture", 2, rl_load_render_texture),
+	JS_CFUNC_DEF("unloadImage", 1, rl_unload_image),
+	JS_CFUNC_DEF("unloadTexture", 1, rl_unload_texture),
+	JS_CFUNC_DEF("unloadRenderTexture", 1, rl_unload_render_texture),
+	JS_CFUNC_DEF("getImageData", 1, rl_get_image_data),
+	JS_CFUNC_DEF("getImageDataNormalized", 1, rl_get_image_data_normalized),
+	JS_CFUNC_DEF("getPixelDataSize", 3, rl_get_pixel_data_size),
+	JS_CFUNC_DEF("getTextureData", 1, rl_get_texture_data),
+	JS_CFUNC_DEF("getScreenData", 0, rl_get_screen_data),
+	JS_CFUNC_DEF("updateTexture", 1, rl_update_texture),
+
 	#pragma endregion
 
 	// module: text
