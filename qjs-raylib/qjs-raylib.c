@@ -9,10 +9,15 @@
 
 #define JS_ATOM_length 48
 
+static JSValue JS_ThrowNotImplemented(JSContext* ctx)
+{
+	return JS_Throw(ctx, JS_NewString(ctx, "Not implemented"));
+}
+
 // module: core
 #pragma region Window-related functions
 
-static JSValue rl_init_window(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_init_window(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int w, h;
 	const char* title = NULL;
@@ -32,56 +37,56 @@ static JSValue rl_init_window(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_window_should_close(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_window_should_close(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, WindowShouldClose());
 }
 
-static JSValue rl_close_window(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_close_window(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	CloseWindow();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_is_window_ready(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_window_ready(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsWindowReady());
 }
 
-static JSValue rl_is_window_minimized(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_window_minimized(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsWindowMinimized());
 }
 
-static JSValue rl_is_window_resized(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_window_resized(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsWindowResized());
 }
 
-static JSValue rl_is_window_hidden(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_window_hidden(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsWindowHidden());
 }
 
-static JSValue rl_toggle_fullscreen(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_toggle_fullscreen(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	ToggleFullscreen();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_unhide_window(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_unhide_window(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	UnhideWindow();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_hide_window(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_hide_window(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	HideWindow();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_icon(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_icon(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Image *icon = (Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
 
@@ -92,7 +97,7 @@ static JSValue rl_set_window_icon(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_title(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_title(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* title = NULL;
 
@@ -105,7 +110,7 @@ static JSValue rl_set_window_title(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_position(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int x, y;
 
@@ -120,7 +125,7 @@ static JSValue rl_set_window_position(JSContext *ctx, JSValueConst this_val, int
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_monitor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_monitor(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -132,7 +137,7 @@ static JSValue rl_set_window_monitor(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_min_size(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_min_size(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int w, h;
 
@@ -147,7 +152,7 @@ static JSValue rl_set_window_min_size(JSContext *ctx, JSValueConst this_val, int
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_window_size(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_window_size(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int w, h;
 
@@ -162,22 +167,22 @@ static JSValue rl_set_window_size(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_get_screen_width(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_screen_width(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetScreenWidth());
 }
 
-static JSValue rl_get_screen_height(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_screen_height(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetScreenHeight());
 }
 
-static JSValue rl_get_monitor_count(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_count(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetMonitorCount());
 }
 
-static JSValue rl_get_monitor_width(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_width(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -187,7 +192,7 @@ static JSValue rl_get_monitor_width(JSContext *ctx, JSValueConst this_val, int a
 	return JS_NewInt32(ctx, GetMonitorWidth(m));
 }
 
-static JSValue rl_get_monitor_height(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_height(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -197,7 +202,7 @@ static JSValue rl_get_monitor_height(JSContext *ctx, JSValueConst this_val, int 
 	return JS_NewInt32(ctx, GetMonitorHeight(m));
 }
 
-static JSValue rl_get_monitor_physical_width(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_physical_width(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -207,7 +212,7 @@ static JSValue rl_get_monitor_physical_width(JSContext *ctx, JSValueConst this_v
 	return JS_NewInt32(ctx, GetMonitorPhysicalWidth(m));
 }
 
-static JSValue rl_get_monitor_physical_height(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_physical_height(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -217,7 +222,7 @@ static JSValue rl_get_monitor_physical_height(JSContext *ctx, JSValueConst this_
 	return JS_NewInt32(ctx, GetMonitorPhysicalHeight(m));
 }
 
-static JSValue rl_get_monitor_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_monitor_name(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int m;
 
@@ -227,12 +232,12 @@ static JSValue rl_get_monitor_name(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_NewString(ctx, GetMonitorName(m));
 }
 
-static JSValue rl_get_clipboard_text(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_clipboard_text(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewString(ctx, GetClipboardText());
 }
 
-static JSValue rl_set_clipboard_text(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_clipboard_text(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* text = NULL;
 
@@ -248,30 +253,30 @@ static JSValue rl_set_clipboard_text(JSContext *ctx, JSValueConst this_val, int 
 #pragma endregion
 #pragma region Cursor-related functions
 
-static JSValue rl_show_cursor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_show_cursor(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	ShowCursor();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_hide_cursor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_hide_cursor(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	HideCursor();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_is_cursor_hidden(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_cursor_hidden(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsCursorHidden());
 }
 
-static JSValue rl_enable_cursor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_enable_cursor(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	EnableCursor();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_disable_cursor(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_disable_cursor(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	DisableCursor();
 	return JS_UNDEFINED;
@@ -280,7 +285,7 @@ static JSValue rl_disable_cursor(JSContext *ctx, JSValueConst this_val, int argc
 #pragma endregion
 #pragma region Drawing-related functions
 
-static JSValue rl_clear_background(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_clear_background(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Color color = BLACK;
 	int colorInt;
@@ -301,52 +306,52 @@ static JSValue rl_clear_background(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_begin_drawing(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_begin_drawing(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	BeginDrawing();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_end_drawing(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_end_drawing(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	EndDrawing();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_begin_mode_2d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_begin_mode_2d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Camera2D cam = *(Camera2D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera2d_class_id);
 	BeginMode2D(cam);
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_end_mode_2d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_end_mode_2d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	EndMode2D();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_begin_mode_3d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_begin_mode_3d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Camera3D cam = *(Camera3D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
 	BeginMode3D(cam);
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_end_mode_3d(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_end_mode_3d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	EndMode3D();
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_begin_texture_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_begin_texture_mode(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	RenderTexture2D tex = *(RenderTexture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_render_texture_class_id);
 	BeginTextureMode(tex);
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_end_texture_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_end_texture_mode(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	EndTextureMode();
 	return JS_UNDEFINED;
@@ -355,7 +360,7 @@ static JSValue rl_end_texture_mode(JSContext *ctx, JSValueConst this_val, int ar
 #pragma endregion
 #pragma region Screen-space-related functions
 
-static JSValue rl_get_mouse_ray(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_mouse_ray(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_ray_class_id);
 	Vector2 mousePosition = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
@@ -375,7 +380,7 @@ static JSValue rl_get_mouse_ray(JSContext *ctx, JSValueConst this_val, int argc,
 	return obj;
 }
 
-static JSValue rl_get_world_to_screen(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_world_to_screen(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_ray_class_id);
 	Vector3 spacePos = *(Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
@@ -395,7 +400,7 @@ static JSValue rl_get_world_to_screen(JSContext *ctx, JSValueConst this_val, int
 	return obj;
 }
 
-static JSValue rl_get_camera_matrix(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_camera_matrix(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_matrix_class_id);
 	Camera camera = *(Camera3D*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
@@ -417,7 +422,7 @@ static JSValue rl_get_camera_matrix(JSContext *ctx, JSValueConst this_val, int a
 #pragma endregion
 #pragma region Timing-related functions
 
-static JSValue rl_set_target_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_target_fps(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int fps;
 
@@ -429,17 +434,17 @@ static JSValue rl_set_target_fps(JSContext *ctx, JSValueConst this_val, int argc
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_get_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_fps(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetFPS());
 }
 
-static JSValue rl_get_frame_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_frame_time(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewFloat64(ctx, GetFrameTime());
 }
 
-static JSValue rl_get_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_time(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewFloat64(ctx, GetTime());
 }
@@ -447,13 +452,13 @@ static JSValue rl_get_time(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 #pragma endregion
 #pragma region Color-related functions
 
-static JSValue rl_color_to_int(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_color_to_int(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
 	return JS_NewInt32(ctx, ColorToInt(color));
 }
 
-static JSValue rl_color_normalize(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_color_normalize(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
 
@@ -472,7 +477,7 @@ static JSValue rl_color_normalize(JSContext *ctx, JSValueConst this_val, int arg
 	return obj;
 }
 
-static JSValue rl_color_to_hsv(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_color_to_hsv(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
 	Vector3* p = js_mallocz(ctx, sizeof(Vector3));
@@ -491,7 +496,7 @@ static JSValue rl_color_to_hsv(JSContext *ctx, JSValueConst this_val, int argc, 
 	return obj;
 }
 
-static JSValue rl_color_from_hsv(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_color_from_hsv(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector3 hsv = *(Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
 
@@ -511,7 +516,7 @@ static JSValue rl_color_from_hsv(JSContext *ctx, JSValueConst this_val, int argc
 	return obj;
 }
 
-static JSValue rl_get_color(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_color(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int colorInt;
 
@@ -534,7 +539,7 @@ static JSValue rl_get_color(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	return obj;
 }
 
-static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_fade(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[0], js_rl_color_class_id);
 
@@ -561,7 +566,7 @@ static JSValue rl_fade(JSContext *ctx, JSValueConst this_val, int argc, JSValueC
 #pragma endregion
 #pragma region Misc. functions
 
-static JSValue rl_set_config_flags(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_config_flags(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int flags;
 
@@ -573,7 +578,7 @@ static JSValue rl_set_config_flags(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_trace_log_level(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_trace_log_level(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int logType;
 
@@ -585,7 +590,7 @@ static JSValue rl_set_trace_log_level(JSContext *ctx, JSValueConst this_val, int
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_trace_log_exit(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_trace_log_exit(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int logType;
 
@@ -597,7 +602,7 @@ static JSValue rl_set_trace_log_exit(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_take_screenshot(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_take_screenshot(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -608,7 +613,7 @@ static JSValue rl_take_screenshot(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_get_random_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_random_value(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int min, max;
 
@@ -621,7 +626,7 @@ static JSValue rl_get_random_value(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_NewInt32(ctx, GetRandomValue(min, max));
 }
 
-static JSValue rl_open_url(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_open_url(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* url = JS_ToCString(ctx, argv[0]);
 	if (url == NULL)
@@ -635,7 +640,7 @@ static JSValue rl_open_url(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 #pragma endregion
 #pragma region Files management functions
 
-static JSValue rl_file_exists(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_file_exists(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -644,7 +649,7 @@ static JSValue rl_file_exists(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_NewBool(ctx, FileExists(fileName));
 }
 
-static JSValue rl_is_file_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_file_extension(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -657,7 +662,7 @@ static JSValue rl_is_file_extension(JSContext *ctx, JSValueConst this_val, int a
 	return JS_NewBool(ctx, IsFileExtension(fileName, extension));
 }
 
-static JSValue rl_get_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_extension(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -666,7 +671,7 @@ static JSValue rl_get_extension(JSContext *ctx, JSValueConst this_val, int argc,
 	return JS_NewString(ctx, GetExtension(fileName));
 }
 
-static JSValue rl_get_file_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_file_name(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* filePath = JS_ToCString(ctx, argv[0]);
 	if (filePath == NULL)
@@ -675,7 +680,7 @@ static JSValue rl_get_file_name(JSContext *ctx, JSValueConst this_val, int argc,
 	return JS_NewString(ctx, GetFileName(filePath));
 }
 
-static JSValue rl_get_file_name_without_extension(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_file_name_without_extension(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* filePath = JS_ToCString(ctx, argv[0]);
 	if (filePath == NULL)
@@ -684,7 +689,7 @@ static JSValue rl_get_file_name_without_extension(JSContext *ctx, JSValueConst t
 	return JS_NewString(ctx, GetFileNameWithoutExt(filePath));
 }
 
-static JSValue rl_get_directory_path(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_directory_path(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -693,12 +698,12 @@ static JSValue rl_get_directory_path(JSContext *ctx, JSValueConst this_val, int 
 	return JS_NewString(ctx, GetDirectoryPath(fileName));
 }
 
-static JSValue rl_get_working_directory(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_working_directory(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewString(ctx, GetWorkingDirectory());
 }
 
-static JSValue rl_get_directory_files(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_directory_files(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* dirPath = JS_ToCString(ctx, argv[0]);
 	if (dirPath == NULL)
@@ -717,7 +722,7 @@ static JSValue rl_get_directory_files(JSContext *ctx, JSValueConst this_val, int
 	return arr;
 }
 
-static JSValue rl_change_directory(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_change_directory(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* dir = JS_ToCString(ctx, argv[0]);
 	if (dir == NULL)
@@ -726,12 +731,12 @@ static JSValue rl_change_directory(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_NewBool(ctx, ChangeDirectory(dir));
 }
 
-static JSValue rl_is_file_dropped(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_file_dropped(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewBool(ctx, IsFileDropped());
 }
 
-static JSValue rl_get_dropped_files(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_dropped_files(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int count;
 	char** files = GetDroppedFiles(&count);
@@ -746,7 +751,7 @@ static JSValue rl_get_dropped_files(JSContext *ctx, JSValueConst this_val, int a
 	return arr;
 }
 
-static JSValue rl_get_file_mod_time(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_file_mod_time(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* fileName = JS_ToCString(ctx, argv[0]);
 	if (fileName == NULL)
@@ -758,7 +763,7 @@ static JSValue rl_get_file_mod_time(JSContext *ctx, JSValueConst this_val, int a
 #pragma endregion
 #pragma region Persistent storage management
 
-static JSValue rl_storage_save_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_storage_save_value(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int position, value;
 
@@ -773,7 +778,7 @@ static JSValue rl_storage_save_value(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_storage_load_value(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int position;
 
@@ -786,7 +791,7 @@ static JSValue rl_storage_load_value(JSContext *ctx, JSValueConst this_val, int 
 #pragma endregion
 #pragma region Input-related functions: keyboard
 
-static JSValue rl_is_key_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_key_pressed(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int key;
 
@@ -796,7 +801,7 @@ static JSValue rl_is_key_pressed(JSContext *ctx, JSValueConst this_val, int argc
 	return JS_NewBool(ctx, IsKeyPressed(key));
 }
 
-static JSValue rl_is_key_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_key_down(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int key;
 
@@ -806,7 +811,7 @@ static JSValue rl_is_key_down(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_NewBool(ctx, IsKeyDown(key));
 }
 
-static JSValue rl_is_key_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_key_released(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int key;
 
@@ -816,7 +821,7 @@ static JSValue rl_is_key_released(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_NewBool(ctx, IsKeyReleased(key));
 }
 
-static JSValue rl_is_key_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_key_up(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int key;
 
@@ -826,12 +831,12 @@ static JSValue rl_is_key_up(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	return JS_NewBool(ctx, IsKeyUp(key));
 }
 
-static JSValue rl_get_key_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_key_pressed(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetKeyPressed());
 }
 
-static JSValue rl_set_exit_key(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_exit_key(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int key;
 
@@ -846,7 +851,7 @@ static JSValue rl_set_exit_key(JSContext *ctx, JSValueConst this_val, int argc, 
 #pragma endregion
 #pragma region Input-related functions: gamepads
 
-static JSValue rl_is_gamepad_available(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_available(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad;
 
@@ -856,7 +861,7 @@ static JSValue rl_is_gamepad_available(JSContext *ctx, JSValueConst this_val, in
 	return JS_NewBool(ctx, IsGamepadAvailable(gamepad));
 }
 
-static JSValue rl_is_gamepad_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_name(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad;
 
@@ -870,7 +875,7 @@ static JSValue rl_is_gamepad_name(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_NewBool(ctx, IsGamepadName(gamepad, name));
 }
 
-static JSValue rl_get_gamepad_name(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gamepad_name(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad;
 
@@ -880,7 +885,7 @@ static JSValue rl_get_gamepad_name(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_NewString(ctx, GetGamepadName(gamepad));
 }
 
-static JSValue rl_is_gamepad_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_button_pressed(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad, button;
 
@@ -893,7 +898,7 @@ static JSValue rl_is_gamepad_button_pressed(JSContext *ctx, JSValueConst this_va
 	return JS_NewBool(ctx, IsGamepadButtonPressed(gamepad, button));
 }
 
-static JSValue rl_is_gamepad_button_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_button_down(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad, button;
 
@@ -906,7 +911,7 @@ static JSValue rl_is_gamepad_button_down(JSContext *ctx, JSValueConst this_val, 
 	return JS_NewBool(ctx, IsGamepadButtonDown(gamepad, button));
 }
 
-static JSValue rl_is_gamepad_button_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_button_released(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad, button;
 
@@ -919,7 +924,7 @@ static JSValue rl_is_gamepad_button_released(JSContext *ctx, JSValueConst this_v
 	return JS_NewBool(ctx, IsGamepadButtonReleased(gamepad, button));
 }
 
-static JSValue rl_is_gamepad_button_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gamepad_button_up(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad, button;
 
@@ -932,12 +937,12 @@ static JSValue rl_is_gamepad_button_up(JSContext *ctx, JSValueConst this_val, in
 	return JS_NewBool(ctx, IsGamepadButtonUp(gamepad, button));
 }
 
-static JSValue rl_get_gamepad_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gamepad_button_pressed(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetGamepadButtonPressed());
 }
 
-static JSValue rl_get_gamepad_axis_count(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gamepad_axis_count(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad;
 
@@ -947,7 +952,7 @@ static JSValue rl_get_gamepad_axis_count(JSContext *ctx, JSValueConst this_val, 
 	return JS_NewBool(ctx, GetGamepadAxisCount(gamepad));
 }
 
-static JSValue rl_get_gamepad_axis_movement(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gamepad_axis_movement(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gamepad, axis;
 
@@ -963,7 +968,7 @@ static JSValue rl_get_gamepad_axis_movement(JSContext *ctx, JSValueConst this_va
 #pragma endregion
 #pragma region Input-related functions: mouse
 
-static JSValue rl_is_mouse_button_pressed(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_mouse_button_pressed(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int button;
 
@@ -973,7 +978,7 @@ static JSValue rl_is_mouse_button_pressed(JSContext *ctx, JSValueConst this_val,
 	return JS_NewBool(ctx, IsMouseButtonPressed(button));
 }
 
-static JSValue rl_is_mouse_button_down(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_mouse_button_down(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int button;
 
@@ -983,7 +988,7 @@ static JSValue rl_is_mouse_button_down(JSContext *ctx, JSValueConst this_val, in
 	return JS_NewBool(ctx, IsMouseButtonDown(button));
 }
 
-static JSValue rl_is_mouse_button_released(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_mouse_button_released(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int button;
 
@@ -993,7 +998,7 @@ static JSValue rl_is_mouse_button_released(JSContext *ctx, JSValueConst this_val
 	return JS_NewBool(ctx, IsMouseButtonReleased(button));
 }
 
-static JSValue rl_is_mouse_button_up(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_mouse_button_up(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int button;
 
@@ -1003,17 +1008,17 @@ static JSValue rl_is_mouse_button_up(JSContext *ctx, JSValueConst this_val, int 
 	return JS_NewBool(ctx, IsMouseButtonUp(button));
 }
 
-static JSValue rl_get_mouse_x(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_mouse_x(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetMouseX());
 }
 
-static JSValue rl_get_mouse_y(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_mouse_y(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetMouseY());
 }
 
-static JSValue rl_get_mouse_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_mouse_position(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
 
@@ -1031,7 +1036,7 @@ static JSValue rl_get_mouse_position(JSContext *ctx, JSValueConst this_val, int 
 	return obj;
 }
 
-static JSValue rl_set_mouse_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_mouse_position(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int x, y;
 
@@ -1046,7 +1051,7 @@ static JSValue rl_set_mouse_position(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_mouse_offset(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_mouse_offset(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int x, y;
 
@@ -1061,7 +1066,7 @@ static JSValue rl_set_mouse_offset(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_mouse_scale(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_mouse_scale(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double x, y;
 
@@ -1076,7 +1081,7 @@ static JSValue rl_set_mouse_scale(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_get_mouse_wheel_move(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_mouse_wheel_move(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetMouseWheelMove());
 }
@@ -1084,17 +1089,17 @@ static JSValue rl_get_mouse_wheel_move(JSContext *ctx, JSValueConst this_val, in
 #pragma endregion
 #pragma region Input-related functions: touch
 
-static JSValue rl_get_touch_x(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_touch_x(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetTouchX());
 }
 
-static JSValue rl_get_touch_y(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_touch_y(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetTouchY());
 }
 
-static JSValue rl_get_touch_position(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_touch_position(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int index;
 
@@ -1120,7 +1125,7 @@ static JSValue rl_get_touch_position(JSContext *ctx, JSValueConst this_val, int 
 #pragma endregion
 #pragma region Gestures and Touch Handling Functions
 
-static JSValue rl_set_gestures_enabled(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_gestures_enabled(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	unsigned int flags;
 
@@ -1132,7 +1137,7 @@ static JSValue rl_set_gestures_enabled(JSContext *ctx, JSValueConst this_val, in
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_is_gesture_detected(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_is_gesture_detected(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int gesture;
 
@@ -1142,22 +1147,22 @@ static JSValue rl_is_gesture_detected(JSContext *ctx, JSValueConst this_val, int
 	return JS_NewBool(ctx, IsGestureDetected(gesture));
 }
 
-static JSValue rl_get_gesture_detected(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_detected(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetGestureDetected());
 }
 
-static JSValue rl_get_touch_points_count(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_touch_points_count(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewInt32(ctx, GetTouchPointsCount());
 }
 
-static JSValue rl_get_gesture_hold_duration(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_hold_duration(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewFloat64(ctx, GetGestureHoldDuration());
 }
 
-static JSValue rl_get_gesture_drag_vector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_drag_vector(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
 
@@ -1175,12 +1180,12 @@ static JSValue rl_get_gesture_drag_vector(JSContext *ctx, JSValueConst this_val,
 	return obj;
 }
 
-static JSValue rl_get_gesture_drag_angle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_drag_angle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewFloat64(ctx, GetGestureDragAngle());
 }
 
-static JSValue rl_get_gesture_pinch_vector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_pinch_vector(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
 
@@ -1198,7 +1203,7 @@ static JSValue rl_get_gesture_pinch_vector(JSContext *ctx, JSValueConst this_val
 	return obj;
 }
 
-static JSValue rl_get_gesture_pinch_angle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_gesture_pinch_angle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	return JS_NewFloat64(ctx, GetGesturePinchAngle());
 }
@@ -1206,7 +1211,7 @@ static JSValue rl_get_gesture_pinch_angle(JSContext *ctx, JSValueConst this_val,
 #pragma endregion
 #pragma region Camera System Functions
 
-static JSValue rl_set_camera_mode(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_camera_mode(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int mode;
 
@@ -1220,14 +1225,14 @@ static JSValue rl_set_camera_mode(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_update_camera(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_update_camera(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Camera* camera = (Camera*)JS_GetOpaque2(ctx, argv[0], js_rl_camera3d_class_id);
 	UpdateCamera(camera);
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_camera_pan_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_camera_pan_control(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int panKey;
 
@@ -1239,7 +1244,7 @@ static JSValue rl_set_camera_pan_control(JSContext *ctx, JSValueConst this_val, 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_camera_alt_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_camera_alt_control(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int altKey;
 
@@ -1251,7 +1256,7 @@ static JSValue rl_set_camera_alt_control(JSContext *ctx, JSValueConst this_val, 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_camera_smooth_zoom_control(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_camera_smooth_zoom_control(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int szKey;
 
@@ -1263,7 +1268,7 @@ static JSValue rl_set_camera_smooth_zoom_control(JSContext *ctx, JSValueConst th
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_camera_move_controls(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_camera_move_controls(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int frontKey, backKey, rightKey, leftKey, upKey, downKey;
 
@@ -1295,7 +1300,7 @@ static JSValue rl_set_camera_move_controls(JSContext *ctx, JSValueConst this_val
 // module: shapes
 #pragma region Basic shapes drawing functions
 
-static JSValue rl_draw_pixel(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_pixel(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int posX, posY;
 
@@ -1312,7 +1317,7 @@ static JSValue rl_draw_pixel(JSContext *ctx, JSValueConst this_val, int argc, JS
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_pixel_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_pixel_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 position = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
@@ -1322,7 +1327,7 @@ static JSValue rl_draw_pixel_v(JSContext *ctx, JSValueConst this_val, int argc, 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_line(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_line(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int startPosX, startPosY, endPosX, endPosY;
 
@@ -1345,7 +1350,7 @@ static JSValue rl_draw_line(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_line_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_line_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1356,7 +1361,7 @@ static JSValue rl_draw_line_v(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_line_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_line_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1373,7 +1378,7 @@ static JSValue rl_draw_line_ex(JSContext *ctx, JSValueConst this_val, int argc, 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_line_bezier(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_line_bezier(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 startPos = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 endPos = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1390,7 +1395,7 @@ static JSValue rl_draw_line_bezier(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_line_strip(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_line_strip(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue len_val = JS_GetProperty(ctx, argv[0], JS_ATOM_length);
 	if (JS_IsException(len_val))
@@ -1415,7 +1420,7 @@ static JSValue rl_draw_line_strip(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int centerX, centerY;
 	double radius;
@@ -1436,7 +1441,7 @@ static JSValue rl_draw_circle(JSContext *ctx, JSValueConst this_val, int argc, J
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int centerX, centerY;
 	double radius;
@@ -1457,7 +1462,7 @@ static JSValue rl_draw_circle_lines(JSContext *ctx, JSValueConst this_val, int a
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle_sector(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle_sector(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double radius;
 	int startAngle, endAngle, segments;
@@ -1482,7 +1487,7 @@ static JSValue rl_draw_circle_sector(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle_sector_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle_sector_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double radius;
 	int startAngle, endAngle, segments;
@@ -1507,7 +1512,7 @@ static JSValue rl_draw_circle_sector_lines(JSContext *ctx, JSValueConst this_val
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle_gradient(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle_gradient(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int centerX, centerY;
 	double radius;
@@ -1529,7 +1534,7 @@ static JSValue rl_draw_circle_gradient(JSContext *ctx, JSValueConst this_val, in
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_circle_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_circle_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double radius;
 
@@ -1544,7 +1549,7 @@ static JSValue rl_draw_circle_v(JSContext *ctx, JSValueConst this_val, int argc,
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_ring(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_ring(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double innerRadius, outerRadius;
 	int startAngle, endAngle, segments;
@@ -1572,7 +1577,7 @@ static JSValue rl_draw_ring(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_ring_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_ring_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double innerRadius, outerRadius;
 	int startAngle, endAngle, segments;
@@ -1600,7 +1605,7 @@ static JSValue rl_draw_ring_lines(JSContext *ctx, JSValueConst this_val, int arg
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int posX, posY, width, height;
 
@@ -1623,7 +1628,7 @@ static JSValue rl_draw_rectangle(JSContext *ctx, JSValueConst this_val, int argc
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 position = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 size = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1634,7 +1639,7 @@ static JSValue rl_draw_rectangle_v(JSContext *ctx, JSValueConst this_val, int ar
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_rec(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
 	Color color = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
@@ -1644,7 +1649,7 @@ static JSValue rl_draw_rectangle_rec(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_pro(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_pro(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double rotation;
 
@@ -1660,7 +1665,7 @@ static JSValue rl_draw_rectangle_pro(JSContext *ctx, JSValueConst this_val, int 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_gradient_v(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_gradient_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int posX, posY, width, height;
 
@@ -1684,7 +1689,7 @@ static JSValue rl_draw_rectangle_gradient_v(JSContext *ctx, JSValueConst this_va
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_gradient_h(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_gradient_h(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int posX, posY, width, height;
 
@@ -1708,7 +1713,7 @@ static JSValue rl_draw_rectangle_gradient_h(JSContext *ctx, JSValueConst this_va
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_gradient_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_gradient_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
 	Color color1 = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
@@ -1721,7 +1726,7 @@ static JSValue rl_draw_rectangle_gradient_ex(JSContext *ctx, JSValueConst this_v
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int posX, posY, width, height;
 
@@ -1744,7 +1749,7 @@ static JSValue rl_draw_rectangle_lines(JSContext *ctx, JSValueConst this_val, in
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_lines_ex(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_lines_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int lineThick;
 
@@ -1759,7 +1764,7 @@ static JSValue rl_draw_rectangle_lines_ex(JSContext *ctx, JSValueConst this_val,
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_rounded(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_rounded(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double roundness;
 	int segments;
@@ -1778,7 +1783,7 @@ static JSValue rl_draw_rectangle_rounded(JSContext *ctx, JSValueConst this_val, 
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_rectangle_rounded_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_rectangle_rounded_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double roundness;
 	int segments, lineThick;
@@ -1800,7 +1805,7 @@ static JSValue rl_draw_rectangle_rounded_lines(JSContext *ctx, JSValueConst this
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_triangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_triangle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 v1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 v2 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1812,7 +1817,7 @@ static JSValue rl_draw_triangle(JSContext *ctx, JSValueConst this_val, int argc,
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_triangle_lines(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_triangle_lines(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 v1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 v2 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1824,7 +1829,7 @@ static JSValue rl_draw_triangle_lines(JSContext *ctx, JSValueConst this_val, int
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_triangle_fan(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_triangle_fan(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue len_val = JS_GetProperty(ctx, argv[0], JS_ATOM_length);
 	if (JS_IsException(len_val))
@@ -1849,7 +1854,7 @@ static JSValue rl_draw_triangle_fan(JSContext *ctx, JSValueConst this_val, int a
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_poly(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	double radius, rotation;
 	int sides;
@@ -1871,7 +1876,7 @@ static JSValue rl_draw_poly(JSContext *ctx, JSValueConst this_val, int argc, JSV
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_set_shapes_texture(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_set_shapes_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Texture2D texture = *(Texture2D*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
 	Rectangle rect = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
@@ -1884,7 +1889,7 @@ static JSValue rl_set_shapes_texture(JSContext *ctx, JSValueConst this_val, int 
 #pragma endregion
 #pragma region Basic shapes collision detection functions
 
-static JSValue rl_check_collision_recs(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_recs(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Rectangle rec1 = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
 	Rectangle rec2 = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
@@ -1892,7 +1897,7 @@ static JSValue rl_check_collision_recs(JSContext *ctx, JSValueConst this_val, in
 	return JS_NewBool(ctx, CheckCollisionRecs(rec1, rec2));
 }
 
-static JSValue rl_check_collision_circles(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_circles(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 center1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 center2 = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
@@ -1908,7 +1913,7 @@ static JSValue rl_check_collision_circles(JSContext *ctx, JSValueConst this_val,
 	return JS_NewBool(ctx, CheckCollisionCircles(center1, radius1, center2, radius2));
 }
 
-static JSValue rl_check_collision_circle_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_circle_rec(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[2], js_rl_rectangle_class_id);
@@ -1921,7 +1926,7 @@ static JSValue rl_check_collision_circle_rec(JSContext *ctx, JSValueConst this_v
 	return JS_NewBool(ctx, CheckCollisionCircleRec(center, radius, rec));
 }
 
-static JSValue rl_get_collision_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_get_collision_rec(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Rectangle rec1 = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
 	Rectangle rec2 = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
@@ -1941,7 +1946,7 @@ static JSValue rl_get_collision_rec(JSContext *ctx, JSValueConst this_val, int a
 	return obj;
 }
 
-static JSValue rl_check_collision_point_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_point_rec(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
@@ -1949,7 +1954,7 @@ static JSValue rl_check_collision_point_rec(JSContext *ctx, JSValueConst this_va
 	return JS_NewBool(ctx, CheckCollisionPointRec(point, rec));
 }
 
-static JSValue rl_check_collision_point_circle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_point_circle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1962,7 +1967,7 @@ static JSValue rl_check_collision_point_circle(JSContext *ctx, JSValueConst this
 	return JS_NewBool(ctx, CheckCollisionPointCircle(point, center, radius));
 }
 
-static JSValue rl_check_collision_point_triangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_check_collision_point_triangle(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
 	Vector2 p1 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
@@ -1977,7 +1982,7 @@ static JSValue rl_check_collision_point_triangle(JSContext *ctx, JSValueConst th
 // module: textures
 #pragma region Image/Texture2D data loading/unloading/saving functions
 
-static JSValue rl_load_image(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_load_image(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
 
@@ -2385,7 +2390,7 @@ static JSValue rl_update_texture(JSContext* ctx, JSValueConst this_val, int argc
 // module: text
 #pragma region Text drawing functions
 
-static JSValue rl_draw_fps(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_fps(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int x, y;
 
@@ -2400,7 +2405,7 @@ static JSValue rl_draw_fps(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_text(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+static JSValue rl_draw_text(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	const char* text = NULL;
 	int x, y, size, colorInt;
@@ -2702,16 +2707,16 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 
 // initialize as a QuickJS module
 
-static int js_rl_init(JSContext *ctx, JSModuleDef *m)
+static int js_rl_init(JSContext* ctx, JSModuleDef* m)
 {
 	js_rl_init_classes(ctx, m);
 
 	return JS_SetModuleExportList(ctx, m, js_rl_funcs, countof(js_rl_funcs));
 }
 
-JSModuleDef *js_init_module(JSContext *ctx, const char *module_name)
+JSModuleDef* js_init_module(JSContext* ctx, const char* module_name)
 {
-	JSModuleDef *m;
+	JSModuleDef* m;
 	m = JS_NewCModule(ctx, module_name, js_rl_init);
 	
 	if (!m)
