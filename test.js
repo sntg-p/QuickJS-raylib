@@ -32,6 +32,8 @@ rlCore.endDrawing();
 
 let textX = 0;
 
+const msg = "Welcome to QuickJS+raylib!";
+
 while (!rlCore.windowShouldClose()) {
 	currX = rlCore.getMouseX();
 	currY = rlCore.getMouseY();
@@ -52,11 +54,11 @@ while (!rlCore.windowShouldClose()) {
 
 	textX = rlCore.getScreenWidth() / 2 - 272 / 2;
 
-	rlCore.drawText("Welcome to QuickJS+raylib!", textX, textY - 3, textSize, color);
-	rlCore.drawText("Welcome to QuickJS+raylib!", textX, textY - 2, textSize, darken2);
-	rlCore.drawText("Welcome to QuickJS+raylib!", textX + 2, textY, textSize, darken2);
-	rlCore.drawText("Welcome to QuickJS+raylib!", textX - 2, textY, textSize, darken2);
-	rlCore.drawText("Welcome to QuickJS+raylib!", textX, textY, textSize, fg);
+	rlCore.drawText(msg, textX, textY - 3, textSize, color);
+	rlCore.drawText(msg, textX, textY - 2, textSize, darken2);
+	rlCore.drawText(msg, textX + 2, textY, textSize, darken2);
+	rlCore.drawText(msg, textX - 2, textY, textSize, darken2);
+	rlCore.drawText(msg, textX, textY, textSize, fg);
 	
 	textY += rlCore.getFrameTime() * 60;
 	
