@@ -2051,7 +2051,7 @@ static JSValue rl_load_image_pro(JSContext* ctx, JSValueConst this_val, int argc
 {
 	return JS_ThrowNotImplemented(ctx);
 
-	int width, height, format, amount;
+	int width, height, format;
 
 	if (JS_ToInt32(ctx, &width, argv[1]))
 		return JS_EXCEPTION;
@@ -2062,7 +2062,7 @@ static JSValue rl_load_image_pro(JSContext* ctx, JSValueConst this_val, int argc
 	if (JS_ToInt32(ctx, &format, argv[3]))
 		return JS_EXCEPTION;
 
-	amount = width * height;
+	// amount = width * height;
 
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
 
@@ -2283,7 +2283,7 @@ static JSValue rl_get_image_data(JSContext* ctx, JSValueConst this_val, int argc
 static JSValue rl_get_image_data_normalized(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
-	Vector4* pixels = GetImageData(image);
+	Vector4* pixels = GetImageDataNormalized(image);
 
 	int count = image.width * image.height;
 
@@ -2369,15 +2369,13 @@ static JSValue rl_update_texture(JSContext* ctx, JSValueConst this_val, int argc
 	int count = texture.width * texture.height;
 	unsigned char* pixels = js_mallocz(ctx, sizeof(unsigned char) * count);
 
-	JSValue arr = JS_NewArray(ctx);
-
 	for (int i = 0; i < count; i++)
 	{
 		JSValue obj = JS_GetPropertyUint32(ctx, argv[1], i);
-		unsigned char pixel;
+		int pixel;
 		if (JS_ToInt32(ctx, &pixel, obj))
 			return JS_EXCEPTION;
-		pixels[i] = pixel;
+		pixels[i] = (unsigned char)pixel;
 	}
 
 	UpdateTexture(texture, pixels);
