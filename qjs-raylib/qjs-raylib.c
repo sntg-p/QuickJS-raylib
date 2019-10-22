@@ -2377,7 +2377,7 @@ static JSValue rl_update_texture(JSContext* ctx, JSValueConst this_val, int argc
 			return JS_EXCEPTION;
 		pixels[i] = (unsigned char)pixel;
 	}
-
+	
 	UpdateTexture(texture, pixels);
 
 	return JS_UNDEFINED;
@@ -2695,11 +2695,144 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("updateTexture", 1, rl_update_texture),
 
 	#pragma endregion
+	#pragma region Image manipulation functions
+
+	
+
+	#pragma endregion
+	#pragma region Image generation functions
+
+	
+
+	#pragma endregion
+	#pragma region Texture2D configuration functions
+
+	
+
+	#pragma endregion
+	#pragma region Texture2D drawing functions
+
+	
+
+	#pragma endregion
 
 	// module: text
+	#pragma region Font loading/unloading functions
+
+	
+
+	#pragma endregion
 	#pragma region Text drawing functions
+
 	JS_CFUNC_DEF("drawFps", 2, rl_draw_fps),
 	JS_CFUNC_DEF("drawText", 5, rl_draw_text),
+
+	#pragma endregion
+	#pragma region Text misc. functions
+
+	
+
+	#pragma endregion
+	#pragma region Text strings management functions
+
+
+
+	#pragma endregion
+
+	// module: models
+	#pragma region Basic geometric 3D shapes drawing functions
+
+
+
+	#pragma endregion
+	#pragma region Model loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Mesh loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Material loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Model animations loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Mesh generation functions
+
+
+
+	#pragma endregion
+	#pragma region Mesh manipulation functions
+
+
+
+	#pragma endregion
+	#pragma region Model drawing functions
+
+
+
+	#pragma endregion
+	#pragma region Collision detection functions
+
+
+
+	#pragma endregion
+
+	// module: shaders
+	#pragma region Shader loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Shader configuration functions
+
+
+
+	#pragma endregion
+	#pragma region Shading begin/end functions
+
+
+
+	#pragma endregion
+	#pragma region VR control functions
+
+
+
+	#pragma endregion
+
+	// module: audio
+	#pragma region Audio device management functions
+
+
+
+	#pragma endregion
+	#pragma region Wave/Sound loading/unloading functions
+
+
+
+	#pragma endregion
+	#pragma region Wave/Sound management functions
+
+
+
+	#pragma endregion
+	#pragma region Music management functions
+
+
+
+	#pragma endregion
+	#pragma region AudioStream management functions
+
+
+
 	#pragma endregion
 };
 
