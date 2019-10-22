@@ -31,3 +31,12 @@ export const drawRectangleRoundedLines = rl.drawRectangleRoundedLines;
 export const drawTriangle = rl.drawTriangle;
 export const drawTriangleLines = rl.drawTriangleLines;
 export const drawTriangleFan = rl.drawTriangleFan;
+
+// Basic shapes collision detection functions
+export const checkCollisionRecs = rl.checkCollisionRecs;
+export const checkCollisionCircles = rl.checkCollisionCircles;
+export const checkCollisionCircleRec = rl.checkCollisionCircleRec;
+export const getCollisionRec = rl.getCollisionRec;
+export const checkCollisionPointRec = rl.checkCollisionPointRec;
+export const checkCollisionPointCircle = rl.checkCollisionPointCircle;
+export const checkCollisionPointTriangle = rl.checkCollisionPointTriangle;

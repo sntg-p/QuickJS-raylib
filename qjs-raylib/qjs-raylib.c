@@ -1884,6 +1884,94 @@ static JSValue rl_set_shapes_texture(JSContext *ctx, JSValueConst this_val, int 
 #pragma endregion
 #pragma region Basic shapes collision detection functions
 
+static JSValue rl_check_collision_recs(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Rectangle rec1 = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Rectangle rec2 = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
+	
+	return JS_NewBool(ctx, CheckCollisionRecs(rec1, rec2));
+}
+
+static JSValue rl_check_collision_circles(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 center1 = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 center2 = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
+
+	double radius1, radius2;
+
+	if (JS_ToFloat64(ctx, &radius1, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &radius2, argv[3]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, CheckCollisionCircles(center1, radius1, center2, radius2));
+}
+
+static JSValue rl_check_collision_circle_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[2], js_rl_rectangle_class_id);
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, CheckCollisionCircleRec(center, radius, rec));
+}
+
+static JSValue rl_get_collision_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Rectangle rec1 = *(Rectangle*)JS_GetOpaque2(ctx, argv[0], js_rl_rectangle_class_id);
+	Rectangle rec2 = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Rectangle coll = GetCollisionRec(rec1, rec2);
+	memcpy(p, &coll, sizeof(Rectangle));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_check_collision_point_rec(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
+
+	return JS_NewBool(ctx, CheckCollisionPointRec(point, rec));
+}
+
+static JSValue rl_check_collision_point_circle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 center = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[2]))
+		return JS_EXCEPTION;
+
+	return JS_NewBool(ctx, CheckCollisionPointCircle(point, center, radius));
+}
+
+static JSValue rl_check_collision_point_triangle(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	Vector2 point = *(Vector2*)JS_GetOpaque2(ctx, argv[0], js_rl_vector2_class_id);
+	Vector2 p1 = *(Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+	Vector2 p2 = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
+	Vector2 p3 = *(Vector2*)JS_GetOpaque2(ctx, argv[3], js_rl_vector2_class_id);
+
+	return JS_NewBool(ctx, CheckCollisionPointTriangle(point, p1, p2, p3));
+}
+
 #pragma endregion
 
 // module: textures
@@ -2197,13 +2285,24 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("setShapesTexture", 2, rl_set_shapes_texture),
 
 	#pragma endregion
+	#pragma region Basic shapes collision detection functions
+
+	JS_CFUNC_DEF("checkCollisionRecs", 2, rl_check_collision_recs),
+	JS_CFUNC_DEF("checkCollisionCircles", 4, rl_check_collision_circles),
+	JS_CFUNC_DEF("checkCollisionCircleRec", 3, rl_check_collision_circle_rec),
+	JS_CFUNC_DEF("getCollisionRec", 2, rl_get_collision_rec),
+	JS_CFUNC_DEF("checkCollisionPointRec", 2, rl_check_collision_point_rec),
+	JS_CFUNC_DEF("checkCollisionPointCircle", 2, rl_check_collision_point_circle),
+	JS_CFUNC_DEF("checkCollisionPointTriangle", 4, rl_check_collision_point_triangle),
+
+	#pragma endregion
 
 	// module: textures
 	#pragma region Image/Texture2D data loading/unloading/saving functions
 	JS_CFUNC_DEF("loadImage", 1, rl_load_image),
 	JS_CFUNC_DEF("loadRenderTexture", 2, rl_load_render_texture),
 	#pragma endregion
-	
+
 	// module: text
 	#pragma region Text drawing functions
 	JS_CFUNC_DEF("drawFps", 2, rl_draw_fps),

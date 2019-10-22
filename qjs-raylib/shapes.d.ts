@@ -1,5 +1,6 @@
 import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4, Rectangle } from './qjs-raylib.so.js';
 
+// Basic shapes drawing functions
 export function drawPixel(posX: number, posY: number, color: Color): void;
 export function drawPixelV(position: Vector2, color: Color): void;
 export function drawLine(startPosX: number, startPosY: number, endPosX: number, endPostY: number, color: Color): void;
@@ -30,3 +31,12 @@ export function drawRectangleRoundedLines(rec: Rectangle, roundness: number, seg
 export function drawTriangle(v1: Vector2, v2: Vector2, v3: Vector2, color: Color): void;
 export function drawTriangleLines(points: Vector2[], color: Color): void;
 export function drawTriangleFan(center: Vector2, sides: number, radius: number, rotation: number, color: Color): void;
+
+// Basic shapes collision detection functions
+export function checkCollisionRecs(rec1: Rectangle, rec2: Rectangle): boolean;
+export function checkCollisionCircles(center1: Vector2, radius1: number, center2: Vector2, radius2: number): boolean;
+export function checkCollisionCircleRec(center: Vector2, radius: number, rec: Rectangle): boolean;
+export function getCollisionRec(rec1: Rectangle, rec2: Rectangle): Rectangle;
+export function checkCollisionPointRec(point: Vector2, rec: Rectangle): boolean;
+export function checkCollisionPointCircle(point: Vector2, center: Vector2, radius: number): boolean;
+export function checkCollisionPointTriangle(point: Vector2, p1: Vector2, p2: Vector2, p3: Vector2): boolean;
