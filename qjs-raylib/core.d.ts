@@ -1,3 +1,4 @@
+import { ConfigFlag, TraceLogType, KeyboardKey, GamepadButton, MouseButton } from './enums.js'
 import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './qjs-raylib.so.js';
 
 // Window-related functions
@@ -91,11 +92,11 @@ export function fade(color: Color, alpha: number): Color;
  * @param flags Use the OR bitwise operator to combine various flags
  * @example setConfigFlags(ConfigFlag.FLAG_MSAA_4X_HINT || ConfigFlag.FLAG_WINDOW_RESIZABLE)
  */
-export function setConfigFlags(flags: number): void;
+export function setConfigFlags(flags: ConfigFlag): void;
 /** Set the current threshold (minimum) log level */
-export function setTraceLogLevel(logType: number): void;
+export function setTraceLogLevel(logType: TraceLogType): void;
 /** Set the exit threshold (minimum) log level */
-export function setTraceLogExit(logType: number): void;
+export function setTraceLogExit(logType: TraceLogType): void;
 /** Takes a screenshot of current screen (saved as .png) */
 export function takeScreenshot(fileName: string): void;
 /** Returns a random value between min and max (both included) */
@@ -122,30 +123,30 @@ export function storageSaveValue(position: number, value: number): void;
 export function storageLoadValue(position: number): number;
 
 // Input-related functions: keyboard
-export function isKeyPressed(key: number): boolean;
-export function isKeyDown(key: number): boolean;
-export function isKeyReleased(key: number): boolean;
-export function isKeyUp(key: number): boolean;
-export function getKeyPressed(): number;
-export function setExitKey(key: number): void;
+export function isKeyPressed(key: KeyboardKey): boolean;
+export function isKeyDown(key: KeyboardKey): boolean;
+export function isKeyReleased(key: KeyboardKey): boolean;
+export function isKeyUp(key: KeyboardKey): boolean;
+export function getKeyPressed(): KeyboardKey;
+export function setExitKey(key: KeyboardKey): void;
 
 // Input-related functions: gamepads
 export function isGamepadAvailable(gamepad: number): boolean;
 export function isGamepadName(gamepad: number, name: string): boolean;
 export function getGamepadName(gamepad: number): void;
-export function isGamepadButtonPressed(gamepad: number, button: number): boolean;
-export function isGamepadButtonDown(gamepad: number, button: number): boolean;
-export function isGamepadButtonReleased(gamepad: number, button: number): boolean;
-export function isGamepadButtonUp(gamepad: number, button: number): boolean;
+export function isGamepadButtonPressed(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonDown(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonReleased(gamepad: number, button: GamepadButton): boolean;
+export function isGamepadButtonUp(gamepad: number, button: GamepadButton): boolean;
 export function getGamepadButtonPressed(): boolean;
 export function getGamepadAxisCount(gamepad: number): number;
 export function getGamepadAxisMovement(gamepad: number, axis: number): number;
 
 // Input-related functions: mouse
-export function isMouseButtonPressed(button: number): boolean;
-export function isMouseButtonDown(button: number): boolean;
-export function IsMouseButtonReleased(button: number): boolean;
-export function isMouseButtonUp(button: number): boolean;
+export function isMouseButtonPressed(button: MouseButton): boolean;
+export function isMouseButtonDown(button: MouseButton): boolean;
+export function IsMouseButtonReleased(button: MouseButton): boolean;
+export function isMouseButtonUp(button: MouseButton): boolean;
 export function getMouseX(): number;
 export function getMouseY(): number;
 export function getMousePosition(): Vector2;
