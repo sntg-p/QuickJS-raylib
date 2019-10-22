@@ -56,7 +56,7 @@
 	- It is not really necessary to compile the project if you are able to read the and understand the `.vscode/tasks.json` and you know or are willing to learn about C compilers/linkers.
 - raylib (download Linux binaries and copy them to `/usr/local/lib/`, copy header files to `/usr/local/include/raylib`)
 - QuickJS (compile and copy the binaries to `/usr/local/bin` and the libraries to `/usr/local/lib/quickjs`)
-- gcc (if you are using the default `.vscode/tasks.json`, but it you could make it work withouth much effort in almost any C compiler)
+- gcc (if you are using the default `.vscode/tasks.json`, but you could probably make it work with any C compiler)
 - Patience, as this is a wip and I'm probably missing lots of things
 
 ## Installation
