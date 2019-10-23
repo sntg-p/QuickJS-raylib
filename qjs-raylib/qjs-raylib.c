@@ -1932,7 +1932,7 @@ static JSValue rl_get_collision_rec(JSContext* ctx, JSValueConst this_val, int a
 	Rectangle rec2 = *(Rectangle*)JS_GetOpaque2(ctx, argv[1], js_rl_rectangle_class_id);
 
 	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
-	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+	Rectangle* p = js_mallocz(ctx, sizeof(Rectangle));
 
 	if (!p) {
 		JS_FreeValue(ctx, obj);
