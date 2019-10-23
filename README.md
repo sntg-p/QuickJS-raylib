@@ -69,8 +69,10 @@
 ## Installation
 In Linux and with Visual Studio Code installed:
 1. Install QuickJS.
-1. Install raylib.
-1. Clone this repo.
-1. Open cloned repo in VS Code.
-1. Run the `build lib` task.
-1. Run the `start` task.
+2. Install raylib.
+3. Clone this repo.
+4. Open cloned repo in VS Code.
+5. Press `Ctrl+P` to invoke the command palette.
+6. Type `task build lib` and press enter.
+7. Repeat 5.
+6. Type `task start` and press enter.
