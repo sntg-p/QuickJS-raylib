@@ -1,4 +1,3 @@
-// Font loading/unloading functions
 import { Font, CharInfo, Image, Color } from "./qjs-raylib.so";
 import { FontType } from "./enums.js";
 

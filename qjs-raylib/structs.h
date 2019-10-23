@@ -5,7 +5,7 @@
 #include "quickjs/cutils.h"
 #include "raylib/raylib.h"
 
-#pragma region Image class
+#pragma region Image
 
 static JSClassID js_rl_image_class_id;
 
@@ -953,7 +953,7 @@ static void js_rl_init_camera3d_class(JSContext* ctx, JSModuleDef* m)
 }
 
 #pragma endregion
-#pragma region Texture2D class
+#pragma region Texture2D
 
 static JSClassID js_rl_texture2d_class_id;
 
