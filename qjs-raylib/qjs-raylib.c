@@ -2645,8 +2645,167 @@ static JSValue rl_draw_text(JSContext* ctx, JSValueConst this_val, int argc, JSV
 	return JS_UNDEFINED;
 }
 
-#pragma endregion
+static JSValue rl_draw_text_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
 
+	const char* text = NULL;
+	
+	text = JS_ToCString(ctx, argv[1]);
+	if (text == NULL)
+		return JS_EXCEPTION;
+
+	Vector2 position = *(Vector2*)JS_GetOpaque2(ctx, argv[2], js_rl_vector2_class_id);
+
+	double fontSize, spacing;
+
+	if (JS_ToFloat64(ctx, &fontSize, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &spacing, argv[4]))
+		return JS_EXCEPTION;
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	DrawTextEx(font, text, position, fontSize, spacing, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_text_rec(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
+
+	const char* text = NULL;
+	
+	text = JS_ToCString(ctx, argv[1]);
+	if (text == NULL)
+		return JS_EXCEPTION;
+
+	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[2], js_rl_rectangle_class_id);
+
+	double fontSize, spacing;
+
+	if (JS_ToFloat64(ctx, &fontSize, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &spacing, argv[4]))
+		return JS_EXCEPTION;
+
+	bool wordWrap = JS_ToBool(ctx, argv[5]);
+
+	Color color = *(Color*)JS_GetOpaque2(ctx, argv[6], js_rl_color_class_id);
+
+	DrawTextRec(font, text, rec, fontSize, spacing, wordWrap, color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_text_rec_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
+
+	const char* text = NULL;
+	
+	text = JS_ToCString(ctx, argv[1]);
+	if (text == NULL)
+		return JS_EXCEPTION;
+
+	Rectangle rec = *(Rectangle*)JS_GetOpaque2(ctx, argv[2], js_rl_rectangle_class_id);
+
+	double fontSize, spacing;
+
+	if (JS_ToFloat64(ctx, &fontSize, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &spacing, argv[4]))
+		return JS_EXCEPTION;
+
+	bool wordWrap = JS_ToBool(ctx, argv[5]);
+
+	Color tint = *(Color*)JS_GetOpaque2(ctx, argv[6], js_rl_color_class_id);
+
+	int selectStart, selectLength;
+
+	if (JS_ToInt32(ctx, &selectStart, argv[7]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &selectLength, argv[8]))
+		return JS_EXCEPTION;
+
+	Color selectText = *(Color*)JS_GetOpaque2(ctx, argv[9], js_rl_color_class_id);
+	Color selectBack = *(Color*)JS_GetOpaque2(ctx, argv[10], js_rl_color_class_id);
+
+	DrawTextRecEx(font, text, rec, fontSize, spacing, wordWrap, tint, selectStart, selectLength, selectText, selectBack);
+
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
+#pragma region Text misc. functions
+
+static JSValue rl_measure_text(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* text = NULL;
+	
+	text = JS_ToCString(ctx, argv[0]);
+	if (text == NULL)
+		return JS_EXCEPTION;
+
+	int fontSize;
+
+	if (JS_ToInt32(ctx, &fontSize, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewInt32(ctx, MeasureText(text, fontSize));
+}
+
+static JSValue rl_measure_text_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
+
+	const char* text = NULL;
+	
+	text = JS_ToCString(ctx, argv[1]);
+	if (text == NULL)
+		return JS_EXCEPTION;
+
+	double fontSize, spacing;
+
+	if (JS_ToFloat64(ctx, &fontSize, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToFloat64(ctx, &spacing, argv[3]))
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_vector2_class_id);
+	Vector2* p = js_mallocz(ctx, sizeof(Vector2));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Vector2 coll = MeasureTextEx(font, text, fontSize, spacing);
+	memcpy(p, &coll, sizeof(Vector2));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_glyph_index(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
+
+	int character;
+
+	if (JS_ToInt32(ctx, &character, argv[1]))
+		return JS_EXCEPTION;
+
+	return JS_NewInt32(ctx, GetGlyphIndex(font, character));
+}
+
+#pragma endregion
 
 // function entries
 static const JSCFunctionListEntry js_rl_funcs[] = {
@@ -2940,11 +3099,16 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 
 	JS_CFUNC_DEF("drawFps", 2, rl_draw_fps),
 	JS_CFUNC_DEF("drawText", 5, rl_draw_text),
+	JS_CFUNC_DEF("drawTextEx", 6, rl_draw_text_ex),
+	JS_CFUNC_DEF("drawTextRec", 7, rl_draw_text_rec),
+	JS_CFUNC_DEF("drawTextRecEx", 11, rl_draw_text_rec_ex),
 
 	#pragma endregion
 	#pragma region Text misc. functions
 
-	
+	JS_CFUNC_DEF("measureText", 2, rl_measure_text),
+	JS_CFUNC_DEF("measureTextEx", 4, rl_measure_text_ex),
+	JS_CFUNC_DEF("getGlyphIndex", 2, rl_get_glyph_index),
 
 	#pragma endregion
 	#pragma region Text strings management functions

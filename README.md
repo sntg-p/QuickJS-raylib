@@ -16,10 +16,8 @@
 		- [ ] Texture2D drawing functions
 	- [ ] Text module
 		- [x] Font loading/unloading functions
-		- [ ] Text drawing functions
-			- [x] drawText() and drawFPS()
-			- [ ] Everything else
-		- [ ] Text misc. functions
+		- [x] Text drawing functions
+		- [x] Text misc. functions
 		- [ ] Text strings management functions
 	- [ ] Models module
 	- [ ] Shaders module
