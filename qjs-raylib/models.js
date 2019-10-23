@@ -1,3 +1,6 @@
+// @ts-nocheck
+import * as rl from './qjs-raylib.so';
+
 // Basic geometric 3D shapes drawing functions
 
 

@@ -1,5 +1,7 @@
-// Font loading/unloading functions
+// @ts-nocheck
+import * as rl from './qjs-raylib.so';
 
+// Font loading/unloading functions
 
 // Text drawing functions
 
