@@ -15,6 +15,12 @@
 		- [ ] Texture2D configuration functions
 		- [ ] Texture2D drawing functions
 	- [ ] Text module
+		- [x] Font loading/unloading functions
+		- [ ] Text drawing functions
+			- [x] drawText() and drawFPS()
+			- [ ] Everything else
+		- [ ] Text misc. functions
+		- [ ] Text strings management functions
 	- [ ] Models module
 	- [ ] Shaders module
 	- [ ] Audio module
@@ -22,7 +28,8 @@
 		- [x] Vectors, Quaternion, Matrix and Color
 		- [x] Image, Texture and RenderTexture
 		- [x] Camera2D, Camera3D, Ray
-		- [ ] Everything else has not been currently implemented
+		- [x] CharInfo, Font
+		- [ ] Everything else
 - [ ] Testing
 	- [ ] Core module
 		- Some testing has been made
@@ -51,12 +58,12 @@
 		- Intel i5-6200U
 
 ## Requirements
-- Visual Studio Code
-	- It is **HIGHLY RECOMMENDED** because of the integration with TypeScript (all functions and objects will have its own types, even if you are using JavaScript)
-	- It is not really necessary to compile the project if you are able to read the and understand the `.vscode/tasks.json` and you know or are willing to learn about C compilers/linkers.
-- raylib (download Linux binaries and copy them to `/usr/local/lib/`, copy header files to `/usr/local/include/raylib`)
-- QuickJS (compile and copy the binaries to `/usr/local/bin` and the libraries to `/usr/local/lib/quickjs`)
-- gcc (if you are using the default `.vscode/tasks.json`, but you could probably make it work with any C compiler)
+- [Visual Studio Code](https://code.visualstudio.com/Download)
+	- It is **HIGHLY RECOMMENDED** because of the integration with TypeScript (all functions and objects will have its own types, even when programming with JavaScript)
+	- It is not really necessary to compile the project if you are able to read and understand the `.vscode/tasks.json`, and if you know or are willing to learn about C compilers/linkers.
+- [raylib](https://github.com/raysan5/raylib/releases/tag/2.5.0) (download Linux binaries and copy them to `/usr/local/lib/`, copy header files to `/usr/local/include/raylib`)
+- [QuickJS](https://github.com/ldarren/QuickJS) (compile and copy the binaries to `/usr/local/bin` and the libraries to `/usr/local/lib/quickjs`)
+- gcc (this is if you are using the default `.vscode/tasks.json`, but you could probably make it work with any C compiler)
 - Patience, as this is a wip and I'm probably missing lots of things
 
 ## Installation
