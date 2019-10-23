@@ -1,8 +1,9 @@
 import { Color, Vector2, Vector3 } from './qjs-raylib/qjs-raylib.so';
 import * as rlCore from './qjs-raylib/core.js';
 import * as rlTextures from './qjs-raylib/textures.js';
-import { ConfigFlag } from './qjs-raylib/enums.js'
 import * as rlShapes from './qjs-raylib/shapes.js';
+import * as rlText from './qjs-raylib/text.js';
+import { ConfigFlag } from './qjs-raylib/enums.js'
 
 const screenWidth = 800;
 const screenHeight = 450;
@@ -54,11 +55,11 @@ while (!rlCore.windowShouldClose()) {
 
 	textX = rlCore.getScreenWidth() / 2 - 272 / 2;
 
-	rlCore.drawText(msg, textX, textY - 3, textSize, color);
-	rlCore.drawText(msg, textX, textY - 2, textSize, darken2);
-	rlCore.drawText(msg, textX + 2, textY, textSize, darken2);
-	rlCore.drawText(msg, textX - 2, textY, textSize, darken2);
-	rlCore.drawText(msg, textX, textY, textSize, fg);
+	rlText.drawText(msg, textX, textY - 3, textSize, color);
+	rlText.drawText(msg, textX, textY - 2, textSize, darken2);
+	rlText.drawText(msg, textX + 2, textY, textSize, darken2);
+	rlText.drawText(msg, textX - 2, textY, textSize, darken2);
+	rlText.drawText(msg, textX, textY, textSize, fg);
 	
 	textY += rlCore.getFrameTime() * 60;
 	
