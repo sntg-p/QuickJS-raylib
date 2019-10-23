@@ -144,9 +144,6 @@ export const setCameraSmoothZoomControl = rl.setCameraSmoothZoomControl;
 export const setCameraMoveControls = rl.setCameraMoveControls;
 
 // asd
-export const drawText = rl.drawText;
-export const drawFps = rl.drawFps;
-
 export const loadImage = rl.loadImage;
 export const getImageWidth = rl.getImageWidth;
 export const getImageHeight = rl.getImageHeight;

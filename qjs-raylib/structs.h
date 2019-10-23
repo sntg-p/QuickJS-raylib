@@ -2320,6 +2320,184 @@ static void js_rl_init_rectangle_class(JSContext* ctx, JSModuleDef* m)
 }
 
 #pragma endregion
+#pragma region CharInfo
+
+static JSClassID js_rl_char_info_class_id;
+
+static JSClassDef js_rl_char_info_class = { "CharInfo" };
+
+static JSValue js_rl_char_info_get_value(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->value);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_char_info_get_rectangle(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+	{
+		JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+		Rectangle* p2 = js_mallocz(ctx, sizeof(Rectangle));
+
+		if (!p2) {
+			JS_FreeValue(ctx, obj);
+			return JS_EXCEPTION;
+		}
+
+		memcpy(p2, &p->rec, sizeof(Rectangle));
+		JS_SetOpaque(obj, p);
+
+		return obj;
+	}
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_char_info_get_offset_x(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->offsetX);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_char_info_get_offset_y(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->offsetY);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_char_info_get_advance_x(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->advanceX);
+	else
+		return JS_EXCEPTION;
+}
+
+static const JSCFunctionListEntry js_rl_char_info_proto_funcs[] = {
+		JS_CGETSET_DEF("value", js_rl_char_info_get_value, NULL),
+		JS_CGETSET_DEF("rec", js_rl_char_info_get_rectangle, NULL),
+		JS_CGETSET_DEF("offsetX", js_rl_char_info_get_offset_x, NULL),
+		JS_CGETSET_DEF("offsetY", js_rl_char_info_get_offset_y, NULL),
+		JS_CGETSET_DEF("advanceX", js_rl_char_info_get_advance_x, NULL),
+};
+
+static void js_rl_init_char_info_class(JSContext* ctx, JSModuleDef* m)
+{
+	JSValue proto;
+	JS_NewClassID(&js_rl_char_info_class_id);
+	JS_NewClass(JS_GetRuntime(ctx), js_rl_char_info_class_id, &js_rl_char_info_class);
+	proto = JS_NewObject(ctx);
+	JS_SetPropertyFunctionList(ctx, proto, js_rl_char_info_proto_funcs, countof(js_rl_char_info_proto_funcs));
+	JS_SetClassProto(ctx, js_rl_char_info_class_id, proto);
+	// JS_NewCFunction2(ctx, js_rl_char_info_constructor, "CharInfo", 1, JS_CFUNC_constructor_or_func, 0);
+}
+
+#pragma endregion
+#pragma region Font
+
+static JSClassID js_rl_font_class_id;
+
+static void js_rl_font_finalizer(JSRuntime* rt, JSValue val)
+{
+	Font* p = (Font*)JS_GetOpaque(val, js_rl_font_class_id);
+	UnloadFont(*p);
+}
+
+static JSClassDef js_rl_font_class = {
+		"Font",
+		.finalizer = js_rl_font_finalizer,
+};
+
+static JSValue js_rl_font_get_texture(JSContext* ctx, JSValueConst this_val)
+{
+	Font* p = (Font*)JS_GetOpaque2(ctx, this_val, js_rl_font_class_id);
+
+	if (p)
+	{
+		JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+		Texture2D* p2 = js_mallocz(ctx, sizeof(Texture2D));
+
+		if (!p2) {
+			JS_FreeValue(ctx, obj);
+			return JS_EXCEPTION;
+		}
+
+		memcpy(p2, &p->texture, sizeof(Texture2D));
+		JS_SetOpaque(obj, p);
+
+		return obj;
+	}
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_font_get_base_size(JSContext* ctx, JSValueConst this_val)
+{
+	Font* p = (Font*)JS_GetOpaque2(ctx, this_val, js_rl_font_class_id);
+
+	if (p)
+		return JS_NewInt32(ctx, p->baseSize);
+	else
+		return JS_EXCEPTION;
+}
+
+static JSValue js_rl_font_get_chars(JSContext* ctx, JSValueConst this_val)
+{
+	Font* p = (Font*)JS_GetOpaque2(ctx, this_val, js_rl_font_class_id);
+
+	if (p)
+	{
+		JSValue arr = JS_NewArray(ctx);
+
+		for (int i = 0; i < p->charsCount; i++)
+		{
+			JSValue obj = JS_NewObjectClass(ctx, js_rl_char_info_class_id);
+			CharInfo* character = js_mallocz(ctx, sizeof(CharInfo));
+			memcpy(character, p->chars + i, sizeof(Color));
+			JS_SetOpaque(obj, character);
+			JS_SetPropertyInt64(ctx, arr, i, obj);
+		}
+
+		return arr;
+	}
+	else
+		return JS_EXCEPTION;
+}
+
+static const JSCFunctionListEntry js_rl_font_proto_funcs[] = {
+		JS_CGETSET_DEF("texture", js_rl_font_get_texture, NULL),
+		JS_CGETSET_DEF("baseSize", js_rl_font_get_base_size, NULL),
+		JS_CGETSET_DEF("chars", js_rl_font_get_chars, NULL),
+};
+
+static void js_rl_init_font_class(JSContext* ctx, JSModuleDef* m)
+{
+	JSValue proto;
+	JS_NewClassID(&js_rl_font_class_id);
+	JS_NewClass(JS_GetRuntime(ctx), js_rl_font_class_id, &js_rl_font_class);
+	proto = JS_NewObject(ctx);
+	JS_SetPropertyFunctionList(ctx, proto, js_rl_font_proto_funcs, countof(js_rl_font_proto_funcs));
+	JS_SetClassProto(ctx, js_rl_font_class_id, proto);
+	// JS_NewCFunction2(ctx, js_rl_font_constructor, "Font", 1, JS_CFUNC_constructor_or_func, 0);
+}
+
+#pragma endregion
 
 static void js_rl_init_classes(JSContext* ctx, JSModuleDef* m)
 {
@@ -2335,6 +2513,8 @@ static void js_rl_init_classes(JSContext* ctx, JSModuleDef* m)
 	js_rl_init_color_class(ctx, m);
 	js_rl_init_matrix_class(ctx, m);
 	js_rl_init_rectangle_class(ctx, m);
+	js_rl_init_font_class(ctx, m);
+	js_rl_init_char_info_class(ctx, m);
 }
 
 static void js_rl_init_module_classes(JSContext* ctx, JSModuleDef* m)
@@ -2350,4 +2530,6 @@ static void js_rl_init_module_classes(JSContext* ctx, JSModuleDef* m)
 	JS_AddModuleExport(ctx, m, "Color");
 	JS_AddModuleExport(ctx, m, "Matrix");
 	JS_AddModuleExport(ctx, m, "Rectangle");
+	JS_AddModuleExport(ctx, m, "Font");
+	JS_AddModuleExport(ctx, m, "CharInfo");
 }

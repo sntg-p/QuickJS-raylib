@@ -2386,6 +2386,214 @@ static JSValue rl_update_texture(JSContext* ctx, JSValueConst this_val, int argc
 #pragma endregion
 
 // module: text
+#pragma region Font loading/unloading functions
+
+static JSValue rl_get_font_default(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_font_class_id);
+	Font* p = js_mallocz(ctx, sizeof(Font));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Font font = GetFontDefault();
+	memcpy(p, &font, sizeof(Font));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_font(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* fileName = NULL;
+	fileName = JS_ToCString(ctx, argv[0]);
+
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_font_class_id);
+	Font* p = js_mallocz(ctx, sizeof(Font));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Font font = LoadFont(fileName);
+	memcpy(p, &font, sizeof(Font));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_font_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* fileName = NULL;
+	fileName = JS_ToCString(ctx, argv[0]);
+
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	int fontSize, charsCount;
+
+	if (JS_ToInt32(ctx, &fontSize, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &charsCount, argv[3]))
+		return JS_EXCEPTION;
+
+	int fontChars[charsCount];
+
+	for (int i = 0; i < charsCount; i++)
+	{
+		JSValue value = JS_GetPropertyUint32(ctx, argv[2], i);
+
+		if (JS_ToInt32(ctx, fontChars + i, value))
+			return JS_EXCEPTION;
+	}
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_font_class_id);
+	Font* p = js_mallocz(ctx, sizeof(Font));
+
+	if (!p) {
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Font font = LoadFontEx(fileName, fontSize, fontChars, charsCount);
+	memcpy(p, &font, sizeof(Font));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_load_font_data(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	const char* fileName = NULL;
+	fileName = JS_ToCString(ctx, argv[0]);
+
+	if (fileName == NULL)
+		return JS_EXCEPTION;
+
+	int fontSize, charsCount, type;
+
+	if (JS_ToInt32(ctx, &fontSize, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &charsCount, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &type, argv[4]))
+		return JS_EXCEPTION;
+
+	int fontChars[charsCount];
+
+	for (int i = 0; i < charsCount; i++)
+	{
+		JSValue value = JS_GetPropertyUint32(ctx, argv[2], i);
+
+		if (JS_ToInt32(ctx, fontChars + i, value))
+			return JS_EXCEPTION;
+	}
+
+	CharInfo* p = js_mallocz(ctx, sizeof(CharInfo) * charsCount);
+	JSValue arr = JS_NewArray(ctx);
+
+	if (!p)
+	{
+		JS_FreeValue(ctx, arr);
+		return JS_EXCEPTION;
+	}
+
+	CharInfo* chars = LoadFontData(fileName, fontSize, fontChars, charsCount, type);
+	memcpy(p, chars, sizeof(CharInfo) * charsCount);
+
+	for (int i = 0; i < charsCount; i++)
+	{
+		JSValue value = JS_NewObjectClass(ctx, js_rl_char_info_class_id);
+		JS_SetOpaque(value, p + i);
+		JS_SetPropertyUint32(ctx, arr, i, value);
+	}
+
+	return arr;
+}
+
+static JSValue rl_load_font_from_image(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Image image = *(Image*)JS_GetOpaque2(ctx, argv[0], js_rl_image_class_id);
+	Color key = *(Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+
+	int firstChar;
+
+	if (JS_ToInt32(ctx, &firstChar, argv[2]))
+		return JS_EXCEPTION;
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_font_class_id);
+	Font* p = js_mallocz(ctx, sizeof(Font));
+
+	if (!p)
+	{
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Font font = LoadFontFromImage(image, key, firstChar);
+	memcpy(p, &font, sizeof(Font));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_get_image_font_atlas(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	int charsCount, fontSize, padding, packMethod;
+
+	if (JS_ToInt32(ctx, &charsCount, argv[1]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &fontSize, argv[2]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &padding, argv[3]))
+		return JS_EXCEPTION;
+
+	if (JS_ToInt32(ctx, &packMethod, argv[4]))
+		return JS_EXCEPTION;
+
+	CharInfo* chars = (CharInfo*)js_mallocz(ctx, sizeof(CharInfo) * charsCount);
+
+	for (int i = 0; i < charsCount; i++)
+	{
+		JSValue value = JS_GetPropertyUint32(ctx, argv[0], i);
+		chars[i] = *(CharInfo*)JS_GetOpaque2(ctx, value, js_rl_char_info_class_id);
+	}
+
+	JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+	Image* p = js_mallocz(ctx, sizeof(Image));
+
+	if (!p)
+	{
+		JS_FreeValue(ctx, obj);
+		return JS_EXCEPTION;
+	}
+
+	Image atlas = GenImageFontAtlas(chars, charsCount, fontSize, padding, packMethod);
+	memcpy(p, &atlas, sizeof(Image));
+	JS_SetOpaque(obj, p);
+
+	return obj;
+}
+
+static JSValue rl_unload_font(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Font font = *(Font*)JS_GetOpaque2(ctx, argv[0], js_rl_font_class_id);
+	UnloadFont(font);
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
 #pragma region Text drawing functions
 
 static JSValue rl_draw_fps(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
@@ -2719,7 +2927,13 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	// module: text
 	#pragma region Font loading/unloading functions
 
-	
+	JS_CFUNC_DEF("getFontDefault", 0, rl_get_font_default),
+	JS_CFUNC_DEF("loadFont", 1, rl_load_font),
+	JS_CFUNC_DEF("loadFontEx", 1, rl_load_font_ex),
+	JS_CFUNC_DEF("loadFontFromImage", 3, rl_load_font_from_image),
+	JS_CFUNC_DEF("loadFontData", 5, rl_load_font_data),
+	JS_CFUNC_DEF("getImageFontAtlas", 5, rl_get_image_font_atlas),
+	JS_CFUNC_DEF("unloadFont", 1, rl_unload_font),
 
 	#pragma endregion
 	#pragma region Text drawing functions

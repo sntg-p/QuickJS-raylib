@@ -179,10 +179,7 @@ export function setCameraAltControl(altKey: number): void;
 export function setCameraSmoothZoomControl(szKey: number): void;
 export function setCameraMoveControls(frontKey: number, backKey: number, rightKey: number, leftKey: number, upKey: number, downKey: number): void;
 
-// Text drawing functions
-export function drawText(text: string, x: number, y: number, size: number, color: Color | number): void;
-export function drawFps(x: number, y: number): void;
-
+// asd
 export function loadImage(fileName: string): number;
 export function getImageWidth(pointer: number): number;
 export function getImageHeight(pointer: number): number;
