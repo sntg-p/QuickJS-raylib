@@ -1,5 +1,5 @@
 import { ConfigFlag, TraceLogType, KeyboardKey, GamepadButton, MouseButton } from './enums.js'
-import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './qjs-raylib.so.js';
+import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './native/qjs-raylib.so';
 
 // Window-related functions
 export function initWindow(width: number, height: number, title: string);

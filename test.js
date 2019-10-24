@@ -1,9 +1,9 @@
-import { Color, Vector2, Vector3 } from './qjs-raylib/qjs-raylib.so';
-import * as rlCore from './qjs-raylib/core.js';
-import * as rlTextures from './qjs-raylib/textures.js';
-import * as rlShapes from './qjs-raylib/shapes.js';
-import * as rlText from './qjs-raylib/text.js';
-import { ConfigFlag } from './qjs-raylib/enums.js'
+import { Color, Vector2, Vector3 } from './lib/qjs-raylib/native/qjs-raylib.so';
+import * as rlCore from './lib/qjs-raylib/core.js';
+import * as rlTextures from './lib/qjs-raylib/textures.js';
+import * as rlShapes from './lib/qjs-raylib/shapes.js';
+import * as rlText from './lib/qjs-raylib/text.js';
+import { ConfigFlag } from './lib/qjs-raylib/enums.js'
 
 const screenWidth = 800;
 const screenHeight = 450;
@@ -15,9 +15,6 @@ rlCore.setTargetFps(60); // fps go between 8000 and 12000 if not set
 
 let textY = 200;
 let textSize = 20;
-
-let image = rlTextures.loadImage('grass_colored.png');
-rlCore.setWindowIcon(image);
 
 const bg = new Color(255, 128, 64);
 const fg = Color(255, 255, 255, 192);

@@ -1,4 +1,4 @@
-import { Image, Vector4, Color, RenderTexture, Texture2D } from './qjs-raylib.so';
+import { Image, Vector4, Color, RenderTexture, Texture2D } from './native/qjs-raylib.so';
 import { CubemapLayoutType } from './enums';
 
 // Image/Texture2D data loading/unloading/saving functions

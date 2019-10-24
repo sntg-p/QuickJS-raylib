@@ -1,4 +1,4 @@
-import { Font, CharInfo, Image, Color, Vector2, Rectangle } from "./qjs-raylib.so";
+import { Font, CharInfo, Image, Color, Vector2, Rectangle } from "./native/qjs-raylib.so";
 import { FontType } from "./enums.js";
 
 // Font loading/unloading functions
