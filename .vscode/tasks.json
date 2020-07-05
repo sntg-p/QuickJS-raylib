@@ -15,7 +15,7 @@
 			"label": "build lib",
 			"type": "shell",
 			"linux": {
-				"command": "gcc -c -Wall -Wno-unknown-pragmas -fpic -o lib/qjs-raylib/native/qjs-raylib.o lib/qjs-raylib/native/qjs-raylib.c && gcc --shared -o lib/qjs-raylib/native/qjs-raylib.so lib/qjs-raylib/native/qjs-raylib.o -L/usr/local/lib/raylib/ -lraylib -lGL -lm -lpthread -ldl -lrt -lX11",
+				"command": "make",
 			},
 			"problemMatcher": "$gcc",
 			"group": "build",
