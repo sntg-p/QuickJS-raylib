@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"qjs-raylib/*": [ "./qjs-raylib/*" ]
+		},
+		"checkJs": true
+	}
+}

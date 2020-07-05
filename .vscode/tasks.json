@@ -4,7 +4,7 @@
 		{
 			"label": "start",
 			"type": "shell",
-			"command": "qjsc test.js && ./a.out",
+			"command": "qjsc src/sample/test.js && ./a.out",
 			"group": "build",
 			"presentation": {
 				"reveal": "always",

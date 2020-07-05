@@ -1,9 +1,9 @@
-import { Color, Vector2, Vector3 } from './lib/qjs-raylib/native/qjs-raylib.so';
-import * as rlCore from './lib/qjs-raylib/core.js';
-import * as rlTextures from './lib/qjs-raylib/textures.js';
-import * as rlShapes from './lib/qjs-raylib/shapes.js';
-import * as rlText from './lib/qjs-raylib/text.js';
-import { ConfigFlag } from './lib/qjs-raylib/enums.js'
+import { Color, Vector2, Vector3 } from './qjs-raylib/native/qjs-raylib.so';
+import * as rlCore from './qjs-raylib/core.js';
+import * as rlTextures from './qjs-raylib/textures.js';
+import * as rlShapes from './qjs-raylib/shapes.js';
+import * as rlText from './qjs-raylib/text.js';
+import { ConfigFlag } from './qjs-raylib/enums.js'
 
 const screenWidth = 800;
 const screenHeight = 450;
@@ -21,8 +21,8 @@ const fg = Color(255, 255, 255, 192);
 
 let prevX, prevY, currX, currY, hue = 0;
 
-const darken = Color(0, 0, 0, 4);
-const darken2 = Color(0, 0, 0, 128);
+// const darken = Color(0, 0, 0, 4);
+const darken = Color(0, 0, 0, 128);
 
 rlCore.beginDrawing();
 rlCore.clearBackground(Color(0,0,0));
@@ -53,9 +53,9 @@ while (!rlCore.windowShouldClose()) {
 	textX = rlCore.getScreenWidth() / 2 - 272 / 2;
 
 	rlText.drawText(msg, textX, textY - 3, textSize, color);
-	rlText.drawText(msg, textX, textY - 2, textSize, darken2);
-	rlText.drawText(msg, textX + 2, textY, textSize, darken2);
-	rlText.drawText(msg, textX - 2, textY, textSize, darken2);
+	rlText.drawText(msg, textX, textY - 2, textSize, darken);
+	rlText.drawText(msg, textX + 2, textY, textSize, darken);
+	rlText.drawText(msg, textX - 2, textY, textSize, darken);
 	rlText.drawText(msg, textX, textY, textSize, fg);
 	
 	textY += rlCore.getFrameTime() * 60;
