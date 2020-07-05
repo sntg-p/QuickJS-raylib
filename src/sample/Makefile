@@ -13,7 +13,10 @@ all: $(TARGET)
 $(TARGET): qjs-raylib
 	qjsc test.js
 
-qjs-raylib:
+$(QJS-RAYLIB):
+	cd ../.. && make
+
+qjs-raylib: $(QJS-RAYLIB)
 	cp -r $(QJS-RAYLIB) ./
 
 clean:
