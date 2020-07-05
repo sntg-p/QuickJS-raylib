@@ -4,11 +4,19 @@
 		{
 			"label": "start",
 			"type": "shell",
-			"command": "qjsc src/sample/test.js && ./a.out",
+			"linux": {
+				"options": {
+					"cwd": "src/sample/"
+				},
+				"command": [
+					"make &&",
+					"./a.out"
+				],
+			},
 			"group": "build",
 			"presentation": {
 				"reveal": "always",
-				"panel": "new"
+				"panel": "dedicated"
 			}
 		},
 		{
@@ -21,7 +29,18 @@
 			"group": "build",
 			"presentation": {
 				"reveal": "silent",
-				"panel": "new"
+				"panel": "dedicated"
+			}
+		},
+		{
+			"label": "clean lib",
+			"type": "shell",
+			"command": "make clean",
+			"problemMatcher": "$gcc",
+			"group": "build",
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated"
 			}
 		}
 	]
