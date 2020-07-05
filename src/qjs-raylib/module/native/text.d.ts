@@ -1,10 +1,10 @@
-import { Font, CharInfo, Image, Color, Vector2, Rectangle } from "./native/qjs-raylib.so";
-import { FontType } from "./enums.js";
+import { Font, CharInfo, Image, Color, Vector2, Rectangle } from "./qjs-raylib.so";
+import { FontType } from "../enums.js";
 
 // Font loading/unloading functions
 export function getFontDefault(): Font;
 export function loadFont(fileName: string): Font;
-export function loadFontEx(fileName: string, fontSize: number, fontChars: number[]): Font;
+export function loadFontEx(fileName: string, fontSize: number, fontChars: number[], charsCount: number): Font;
 export function loadFontFromImage(image: Image, key: Color, firstChar: number): Font;
 export function loadFontData(fileName: string, fontSize: number, fontChars: number[], type: FontType): CharInfo[];
 export function getImageFontAtlas(chars: CharInfo[], fontSize: number, padding: number, packMethod: number): Image;

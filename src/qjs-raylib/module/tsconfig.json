@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es6",
+    "outDir": "../../../dist/qjs-raylib",
+    "checkJs": true,
+    "allowJs": true,
+    "declaration": true
+  },
+  "baseUrl": "."
+}

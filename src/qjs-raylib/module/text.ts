@@ -1,13 +1,11 @@
-// @ts-nocheck
 import * as rl from './native/qjs-raylib.so';
 
 // Font loading/unloading functions
 export const getFontDefault = rl.getFontDefault;
 export const loadFont = rl.loadFont;
-export function loadFontEx(fileName, fontSize, fontChars)
-{
-	return rl.loadFontEx(fileName, fontSize, fontChars, fontChars.length);
-}
+
+export const loadFontEx = (fileName: string, fontSize: number, fontChars: number[]) => rl.loadFontEx(fileName, fontSize, fontChars, fontChars.length);
+
 export const loadFontFromImage = rl.loadFontFromImage;
 export const loadFontData = rl.loadFontData;
 export const getImageFontAtlas = rl.getImageFontAtlas;

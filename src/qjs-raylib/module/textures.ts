@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as rl from './native/qjs-raylib.so';
 
 // Image/Texture2D data loading/unloading/saving functions

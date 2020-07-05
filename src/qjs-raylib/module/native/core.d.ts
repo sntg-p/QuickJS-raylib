@@ -1,12 +1,12 @@
-import { ConfigFlag, TraceLogType, KeyboardKey, GamepadButton, MouseButton } from './enums.js'
-import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4 } from './native/qjs-raylib.so';
+import { ConfigFlag, TraceLogType, KeyboardKey, GamepadButton, MouseButton } from '../enums.js'
+import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4, Image, Ray } from './qjs-raylib.so';
 
 // Window-related functions
-export function initWindow(width: number, height: number, title: string);
+export function initWindow(width: number, height: number, title: string): void;
 export function windowShouldClose(): boolean;
-export function closeWindow();
+export function closeWindow(): void;
 export function isWindowReady(): boolean;
-export function setWindowIcon(image: rlTextures.Image): void;
+export function setWindowIcon(image: Image): void;
 export function setWindowIconImpl(image: number): void;
 export function setWindowTitle(title: string): void;
 export function setWindowPosition(x: number, y: number): void;
@@ -27,7 +27,7 @@ export function setClipboardText(text: string): void;
 // Cursor-related functions
 export function showCursor(): void;
 export function hideCursor(): void;
-export function isCursorHidden(): bool;
+export function isCursorHidden(): boolean;
 export function enableHidden(): void;
 export function disableHidden(): void;
 
@@ -100,7 +100,7 @@ export function setTraceLogExit(logType: TraceLogType): void;
 /** Takes a screenshot of current screen (saved as .png) */
 export function takeScreenshot(fileName: string): void;
 /** Returns a random value between min and max (both included) */
-export function getRandomValue(min: number, max: number): int;
+export function getRandomValue(min: number, max: number): number;
 /** Open URL with default system browser (if available) */
 export function openURL(url: string): void;
 
@@ -180,6 +180,5 @@ export function setCameraSmoothZoomControl(szKey: number): void;
 export function setCameraMoveControls(frontKey: number, backKey: number, rightKey: number, leftKey: number, upKey: number, downKey: number): void;
 
 // asd
-export function loadImage(fileName: string): number;
 export function getImageWidth(pointer: number): number;
 export function getImageHeight(pointer: number): number;

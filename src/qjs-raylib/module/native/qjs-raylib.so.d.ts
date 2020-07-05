@@ -1,7 +1,15 @@
-type pointer = number;
-const MAX_SHADER_LOCATIONS = 32;
+export * from './core';
+export * from './shapes';
+export * from './text';
+export * from './textures';
 
-export function Vector2(x: number, y: number);
+type pointer = number;
+
+type Tuple<TItem, TLength extends number> = [TItem, ...TItem[]] & { length: TLength };
+
+export const MAX_SHADER_LOCATIONS = 32;
+
+export function Vector2(x: number, y: number): Vector2;
 export class Vector2
 {
 	x: number;
@@ -9,14 +17,14 @@ export class Vector2
 	constructor(x: number, y: number);
 }
 
-export function Vector3(x: number, y: number, z: number);
+export function Vector3(x: number, y: number, z: number): Vector3;
 export class Vector3 extends Vector2
 {
 	z: number;
 	constructor(x: number, y: number, z: number);
 }
 
-export function Vector4(x: number, y: number, z: number, w: number);
+export function Vector4(x: number, y: number, z: number, w: number): Vector4;
 export class Vector4 extends Vector3
 {
 	w: number;
@@ -25,7 +33,7 @@ export class Vector4 extends Vector3
 
 export type Quaternion = Vector4;
 
-export function Matrix(m0: number, m1: number, m2: number, m3: number, m4: number, m5: number, m6: number, m7: number, m8: number, m9: number, m10: number, m11: number, m12: number, m13: number, m14: number, m15: number);
+export function Matrix(m0: number, m1: number, m2: number, m3: number, m4: number, m5: number, m6: number, m7: number, m8: number, m9: number, m10: number, m11: number, m12: number, m13: number, m14: number, m15: number): Matrix;
 export class Matrix
 {
 	m0: number;
@@ -54,12 +62,9 @@ export class Matrix
  * @param b Blue component (from 0 to 255)
  * @param a Alpha component (from 0 to 255). 255 if omitted.
  */
-export function Color(r: number, g: number, b: number, a?: number);
+export function Color(r: number, g: number, b: number, a?: number): Color;
 export class Color
 {
-	debug() {
-		throw new Error("Method not implemented.");
-	}
 	r: number;
 	g: number;
 	b: number;
@@ -105,7 +110,7 @@ export class RenderTexture
 	get texture(): Texture;
 	get depth(): Texture;
 	get depthTexture(): boolean;
-	set depthTexture(value: boolean): void;
+	set depthTexture(value: boolean);
 	constructor(width: number, height: number);
 }
 
@@ -187,13 +192,13 @@ export class Mesh
 	boneWeights: pointer;
 
 	// OpenGL identifiers
-	vaoId: number | number[7];
+	vaoId: Tuple<number, 7>;
 }
 
 export interface Shader
 {
 	id: number;
-	locs: number[32];
+	locs: Tuple<number, 32>;
 }
 
 export interface MaterialMap
@@ -206,7 +211,7 @@ export interface MaterialMap
 export interface Material
 {
 	shader: Shader;
-	maps: MaterialMap[32];
+	maps: Tuple<MaterialMap, 32>;
 	params: pointer;
 }
 
@@ -249,7 +254,7 @@ export class ModelAnimation
 	framePoses: pointer[];
 }
 
-export interface Ray
+export class Ray
 {
 	position: Vector3;
 	direction: Vector3;
@@ -310,6 +315,6 @@ export interface VrDeviceInfo
 	eyeToScreenDistance: number;
 	lensSeparationDistance: number;
 	interpupullaryDistance: number;
-	lensDistortionValues: number[4];
-	chromaAbCorrection: number[4];
+	lensDistortionValues: Tuple<number, 4>;
+	chromaAbCorrection: Tuple<number, 4>;
 }

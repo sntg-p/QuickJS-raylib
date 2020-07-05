@@ -1,4 +1,4 @@
-import { Camera2D, Camera3D, RenderTexture, Vector2, Vector3, Matrix, Color, Vector4, Rectangle } from './native/qjs-raylib.so';
+import { Vector2, Color, Rectangle } from './qjs-raylib.so';
 
 // Basic shapes drawing functions
 export function drawPixel(posX: number, posY: number, color: Color): void;

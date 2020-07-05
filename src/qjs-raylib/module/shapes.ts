@@ -1,4 +1,3 @@
-// @ts-nocheck
 import * as rl from './native/qjs-raylib.so'
 
 // Basic shapes drawing functions
