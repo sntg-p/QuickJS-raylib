@@ -2319,29 +2319,6 @@ JSValue js_rl_char_info_get_value(JSContext* ctx, JSValueConst this_val)
 		return JS_EXCEPTION;
 }
 
-JSValue js_rl_char_info_get_rectangle(JSContext* ctx, JSValueConst this_val)
-{
-	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
-
-	if (p)
-	{
-		JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
-		Rectangle* p2 = js_mallocz(ctx, sizeof(Rectangle));
-
-		if (!p2) {
-			JS_FreeValue(ctx, obj);
-			return JS_EXCEPTION;
-		}
-
-		memcpy(p2, &p->rec, sizeof(Rectangle));
-		JS_SetOpaque(obj, p);
-
-		return obj;
-	}
-	else
-		return JS_EXCEPTION;
-}
-
 JSValue js_rl_char_info_get_offset_x(JSContext* ctx, JSValueConst this_val)
 {
 	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
@@ -2372,13 +2349,32 @@ JSValue js_rl_char_info_get_advance_x(JSContext* ctx, JSValueConst this_val)
 		return JS_EXCEPTION;
 }
 
+JSValue js_rl_char_info_get_image(JSContext* ctx, JSValueConst this_val)
+{
+	CharInfo* p = (CharInfo*)JS_GetOpaque2(ctx, this_val, js_rl_char_info_class_id);
+
+	if (p)
+	{
+		JSValue obj = JS_NewObjectClass(ctx, js_rl_image_class_id);
+
+		if (JS_IsException(obj))
+			return obj;
+
+		JS_SetOpaque(obj, &p->image);
+
+		return obj;
+	}
+	else
+		return JS_EXCEPTION;
+}
+
 const JSCFunctionListEntry js_rl_char_info_proto_funcs[] =
 {
 	JS_CGETSET_DEF("value", js_rl_char_info_get_value, NULL),
-	JS_CGETSET_DEF("rec", js_rl_char_info_get_rectangle, NULL),
 	JS_CGETSET_DEF("offsetX", js_rl_char_info_get_offset_x, NULL),
 	JS_CGETSET_DEF("offsetY", js_rl_char_info_get_offset_y, NULL),
 	JS_CGETSET_DEF("advanceX", js_rl_char_info_get_advance_x, NULL),
+	JS_CGETSET_DEF("image", js_rl_char_info_get_image, NULL),
 };
 
 void js_rl_init_char_info_class(JSContext* ctx, JSModuleDef* m)

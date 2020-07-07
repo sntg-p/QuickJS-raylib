@@ -8,7 +8,6 @@ export const loadFontEx = (fileName: string, fontSize: number, fontChars: number
 
 export const loadFontFromImage = rl.loadFontFromImage;
 export const loadFontData = rl.loadFontData;
-export const getImageFontAtlas = rl.getImageFontAtlas;
 export const unloadFont = rl.unloadFont;
 
 // Text drawing functions

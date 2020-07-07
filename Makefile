@@ -1,4 +1,4 @@
-VPATH = src/qjs-raylib/native /usr/local/include
+VPATH = src/qjs-raylib/native
 
 LINK_TARGET = qjs-raylib.so
 
@@ -44,5 +44,5 @@ build_module:
 
 $(LINK_TARGET): mkdirs $(OBJS)
 	cd build && \
-	gcc --shared -o ../$(DIST_NATIVE)/$@ $(OBJS) $(LIB_PATHS) $(LIBS)
+	gcc --shared -DJS_SHARED_LIBRARY -o ../$(DIST_NATIVE)/$@ $(OBJS) $(LIB_PATHS) $(LIBS)
 

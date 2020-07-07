@@ -16,7 +16,7 @@
 			"group": "build",
 			"presentation": {
 				"reveal": "always",
-				"panel": "dedicated"
+				"panel": "shared"
 			}
 		},
 		{
@@ -28,8 +28,8 @@
 			"problemMatcher": "$gcc",
 			"group": "build",
 			"presentation": {
-				"reveal": "silent",
-				"panel": "dedicated"
+				"reveal": "always",
+				"panel": "shared"
 			}
 		},
 		{
@@ -40,7 +40,7 @@
 			"group": "build",
 			"presentation": {
 				"reveal": "silent",
-				"panel": "dedicated"
+				"panel": "shared"
 			}
 		}
 	]

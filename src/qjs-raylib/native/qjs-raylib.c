@@ -3,7 +3,7 @@
 
 #include "quickjs/quickjs.h"
 #include "quickjs/cutils.h"
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 #include "structs.h"
 
@@ -773,7 +773,7 @@ static JSValue rl_storage_save_value(JSContext* ctx, JSValueConst this_val, int 
 	if (JS_ToInt32(ctx, &value, argv[1]))
 		return JS_EXCEPTION;
 
-	StorageSaveValue(position, value);
+	SaveStorageValue(position, value);
 
 	return JS_UNDEFINED;
 }
@@ -785,7 +785,7 @@ static JSValue rl_storage_load_value(JSContext* ctx, JSValueConst this_val, int 
 	if (JS_ToInt32(ctx, &position, argv[0]))
 		return JS_EXCEPTION;
 
-	return JS_NewInt32(ctx, StorageLoadValue(position));
+	return JS_NewInt32(ctx, LoadStorageValue(position));
 }
 
 #pragma endregion
@@ -2546,7 +2546,7 @@ static JSValue rl_load_font_from_image(JSContext* ctx, JSValueConst this_val, in
 	return obj;
 }
 
-static JSValue rl_get_image_font_atlas(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+/*static JSValue rl_get_image_font_atlas(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	int charsCount, fontSize, padding, packMethod;
 
@@ -2584,7 +2584,7 @@ static JSValue rl_get_image_font_atlas(JSContext* ctx, JSValueConst this_val, in
 	JS_SetOpaque(obj, p);
 
 	return obj;
-}
+}*/
 
 static JSValue rl_unload_font(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
@@ -3091,7 +3091,7 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("loadFontEx", 1, rl_load_font_ex),
 	JS_CFUNC_DEF("loadFontFromImage", 3, rl_load_font_from_image),
 	JS_CFUNC_DEF("loadFontData", 5, rl_load_font_data),
-	JS_CFUNC_DEF("getImageFontAtlas", 5, rl_get_image_font_atlas),
+	// JS_CFUNC_DEF("getImageFontAtlas", 5, rl_get_image_font_atlas),
 	JS_CFUNC_DEF("unloadFont", 1, rl_unload_font),
 
 	#pragma endregion

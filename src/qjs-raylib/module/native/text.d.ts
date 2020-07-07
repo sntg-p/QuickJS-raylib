@@ -7,7 +7,6 @@ export function loadFont(fileName: string): Font;
 export function loadFontEx(fileName: string, fontSize: number, fontChars: number[], charsCount: number): Font;
 export function loadFontFromImage(image: Image, key: Color, firstChar: number): Font;
 export function loadFontData(fileName: string, fontSize: number, fontChars: number[], type: FontType): CharInfo[];
-export function getImageFontAtlas(chars: CharInfo[], fontSize: number, padding: number, packMethod: number): Image;
 export function unloadFont(font: Font): void;
 
 // Text drawing functions

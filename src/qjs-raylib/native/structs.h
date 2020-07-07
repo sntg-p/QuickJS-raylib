@@ -3,7 +3,7 @@
 
 #include "quickjs/quickjs.h"
 #include "quickjs/cutils.h"
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 #pragma region Image
 
@@ -246,10 +246,10 @@ JSClassID js_rl_char_info_class_id;
 void js_rl_init_char_info_class(JSContext* ctx, JSModuleDef* m);
 
 JSValue js_rl_char_info_get_value(JSContext* ctx, JSValueConst this_val);
-JSValue js_rl_char_info_get_rectangle(JSContext* ctx, JSValueConst this_val);
 JSValue js_rl_char_info_get_offset_x(JSContext* ctx, JSValueConst this_val);
 JSValue js_rl_char_info_get_offset_y(JSContext* ctx, JSValueConst this_val);
 JSValue js_rl_char_info_get_advance_x(JSContext* ctx, JSValueConst this_val);
+JSValue js_rl_char_info_get_image(JSContext* ctx, JSValueConst this_val);
 
 #pragma endregion
 #pragma region Font
