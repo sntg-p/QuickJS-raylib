@@ -9,6 +9,7 @@
 *.so
 *.o
 /src/sample/qjs-raylib
+/src/test
 # Only exists if Bazel was run
 /bazel-out
 
