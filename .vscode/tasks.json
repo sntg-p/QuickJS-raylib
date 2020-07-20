@@ -2,16 +2,46 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "start",
+			"label": "clean sample",
 			"type": "shell",
 			"linux": {
 				"options": {
 					"cwd": "src/sample/"
 				},
-				"command": [
-					"make &&",
-					"./a.out"
-				],
+				"command": "make clean",
+			},
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "build sample",
+			"type": "shell",
+			"linux": {
+				"options": {
+					"cwd": "src/sample/"
+				},
+				"command": "make",
+			},
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "start sample",
+			"dependsOn": [
+				"build sample"
+			],
+			"type": "shell",
+			"linux": {
+				"options": {
+					"cwd": "src/sample/"
+				},
+				"command": "./a.out",
 			},
 			"group": "build",
 			"presentation": {
