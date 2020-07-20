@@ -17,15 +17,15 @@ let textY = 200;
 let textSize = 20;
 
 const bg = new Color(255, 128, 64);
-const fg = Color(255, 255, 255, 192);
+const fg = new Color(255, 255, 255, 192);
 
 let prevX, prevY, currX, currY, hue = 0;
 
 // const darken = Color(0, 0, 0, 4);
-const darken = Color(0, 0, 0, 128);
+const darken = new Color(0, 0, 0, 128);
 
 rlCore.beginDrawing();
-rlCore.clearBackground(Color(0,0,0));
+rlCore.clearBackground(new Color(0,0,0));
 rlCore.endDrawing();
 
 let textX = 0;
@@ -41,13 +41,13 @@ while (!rlCore.windowShouldClose()) {
 	//rlCore.clearBackground(bg);
 	//rlCore.drawFps(2, 0);
 
-	let color = rlCore.colorFromHSV(Vector3(hue, 1, 1))
+	let color = rlCore.colorFromHSV(new Vector3(hue, 1, 1))
 	hue += rlCore.getFrameTime() * 60;
 	if (hue > 360)
 		hue = 0;
 
 	rlShapes.drawRectangle(0, 0, rlCore.getScreenWidth(), rlCore.getScreenHeight(), darken);
-	rlShapes.drawLineEx(Vector2(prevX, prevY), Vector2(currX, currY), 32, color);
+	rlShapes.drawLineEx(new Vector2(prevX, prevY), new Vector2(currX, currY), 32, color);
 	rlShapes.drawCircle(currX, currY, 16, color);
 
 	textX = rlCore.getScreenWidth() / 2 - 272 / 2;
