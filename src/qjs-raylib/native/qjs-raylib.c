@@ -2807,6 +2807,457 @@ static JSValue rl_get_glyph_index(JSContext* ctx, JSValueConst this_val, int arg
 
 #pragma endregion
 
+// module: models
+#pragma region Basic geometric 3D shapes drawing functions
+
+static JSValue rl_draw_line_3d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* start = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!start)
+		return JS_EXCEPTION;
+
+	Vector3* end = (Vector3*)JS_GetOpaque2(ctx, argv[1], js_rl_vector3_class_id);
+
+	if (!end)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+
+	DrawLine3D(*start, *end, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_point_3d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* pos = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!pos)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawPoint3D(*pos, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_circle_3d(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* center = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!center)
+		return JS_EXCEPTION;
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	Vector3* rotationAxis = (Vector3*)JS_GetOpaque2(ctx, argv[2], js_rl_vector3_class_id);
+
+	if (!rotationAxis)
+		return JS_EXCEPTION;
+
+	double rotationAngle;
+
+	if (JS_ToFloat64(ctx, &rotationAngle, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCircle3D(*center, radius, *rotationAxis, rotationAngle, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cube(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	double width;
+
+	if (JS_ToFloat64(ctx, &width, argv[1]))
+		return JS_EXCEPTION;
+
+	double height;
+
+	if (JS_ToFloat64(ctx, &height, argv[2]))
+		return JS_EXCEPTION;
+
+	double length;
+
+	if (JS_ToFloat64(ctx, &length, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCube(*position, width, height, length, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cube_wires(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	double width;
+
+	if (JS_ToFloat64(ctx, &width, argv[1]))
+		return JS_EXCEPTION;
+
+	double height;
+
+	if (JS_ToFloat64(ctx, &height, argv[2]))
+		return JS_EXCEPTION;
+
+	double length;
+
+	if (JS_ToFloat64(ctx, &length, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCubeWires(*position, width, height, length, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cube_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	Vector3* size = (Vector3*)JS_GetOpaque2(ctx, argv[1], js_rl_vector3_class_id);
+
+	if (!size)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+
+	DrawCubeV(*position, *size, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cube_wires_v(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	Vector3* size = (Vector3*)JS_GetOpaque2(ctx, argv[1], js_rl_vector3_class_id);
+
+	if (!size)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCubeWiresV(*position, *size, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cube_texture(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Texture* texture = (Texture*)JS_GetOpaque2(ctx, argv[0], js_rl_texture2d_class_id);
+
+	if (!texture)
+		return JS_EXCEPTION;
+	
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[1], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	double width;
+
+	if (JS_ToFloat64(ctx, &width, argv[2]))
+		return JS_EXCEPTION;
+
+	double height;
+
+	if (JS_ToFloat64(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	double length;
+
+	if (JS_ToFloat64(ctx, &length, argv[4]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[5], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCubeTexture(*texture, *position, width, height, length, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_sphere(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* center = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!center)
+		return JS_EXCEPTION;
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawSphere(*center, radius, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_sphere_ex(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* center = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!center)
+		return JS_EXCEPTION;
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	int rings;
+
+	if (JS_ToInt32(ctx, &rings, argv[2]))
+		return JS_EXCEPTION;
+
+	int slices;
+
+	if (JS_ToInt32(ctx, &slices, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawSphereEx(*center, radius, rings, slices, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_sphere_wires(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* center = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!center)
+		return JS_EXCEPTION;
+
+	double radius;
+
+	if (JS_ToFloat64(ctx, &radius, argv[1]))
+		return JS_EXCEPTION;
+
+	int rings;
+
+	if (JS_ToInt32(ctx, &rings, argv[2]))
+		return JS_EXCEPTION;
+
+	int slices;
+
+	if (JS_ToInt32(ctx, &slices, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawSphereWires(*center, radius, rings, slices, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cylinder(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	double radiusTop;
+
+	if (JS_ToFloat64(ctx, &radiusTop, argv[1]))
+		return JS_EXCEPTION;
+
+	double radiusBottom;
+
+	if (JS_ToFloat64(ctx, &radiusBottom, argv[2]))
+		return JS_EXCEPTION;
+
+	double height;
+
+	if (JS_ToFloat64(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	int slices;
+
+	if (JS_ToInt32(ctx, &slices, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCylinder(*position, radiusTop, radiusBottom, height, slices, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_cylinder_wires(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	double radiusTop;
+
+	if (JS_ToFloat64(ctx, &radiusTop, argv[1]))
+		return JS_EXCEPTION;
+
+	double radiusBottom;
+
+	if (JS_ToFloat64(ctx, &radiusBottom, argv[2]))
+		return JS_EXCEPTION;
+
+	double height;
+
+	if (JS_ToFloat64(ctx, &height, argv[3]))
+		return JS_EXCEPTION;
+
+	int slices;
+
+	if (JS_ToInt32(ctx, &slices, argv[3]))
+		return JS_EXCEPTION;
+	
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[4], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawCylinderWires(*position, radiusTop, radiusBottom, height, slices, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_plane(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* center = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!center)
+		return JS_EXCEPTION;
+
+	Vector2* size = (Vector2*)JS_GetOpaque2(ctx, argv[1], js_rl_vector2_class_id);
+
+	if (!size)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[2], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawPlane(*center, *size, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_ray(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Ray* ray = (Ray*)JS_GetOpaque2(ctx, argv[0], js_rl_ray_class_id);
+
+	if (!ray)
+		return JS_EXCEPTION;
+
+	Color* color = (Color*)JS_GetOpaque2(ctx, argv[1], js_rl_color_class_id);
+
+	if (!color)
+		return JS_EXCEPTION;
+
+	DrawRay(*ray, *color);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_grid(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	int slices;
+
+	if (JS_ToInt32(ctx, &slices, argv[0]))
+		return JS_EXCEPTION;
+	
+	double spacing;
+
+	if (JS_ToFloat64(ctx, &spacing, argv[1]))
+		return JS_EXCEPTION;
+
+	DrawGrid(slices, spacing);
+
+	return JS_UNDEFINED;
+}
+
+static JSValue rl_draw_ray(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+{
+	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
+
+	if (!position)
+		return JS_EXCEPTION;
+
+	DrawGizmo(*position);
+
+	return JS_UNDEFINED;
+}
+
+#pragma endregion
+
 // function entries
 static const JSCFunctionListEntry js_rl_funcs[] = {
 	// module: core
@@ -3120,7 +3571,23 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	// module: models
 	#pragma region Basic geometric 3D shapes drawing functions
 
-
+	JS_CFUNC_DEF("drawLine3d", 3, rl_draw_line_3d),
+	JS_CFUNC_DEF("drawPoint3d", 2, rl_draw_point_3d),
+	JS_CFUNC_DEF("drawCircle3d", 5, rl_draw_circle_3d),
+	JS_CFUNC_DEF("drawCube", 5, rl_draw_cube),
+	JS_CFUNC_DEF("drawCubeWires", 5, rl_draw_cube_wires),
+	JS_CFUNC_DEF("drawCubeV", 3, rl_draw_cube_v),
+	JS_CFUNC_DEF("drawCubeWiresV", 3, rl_draw_cube_wires_v),
+	JS_CFUNC_DEF("drawCubeTexture", 6, rl_draw_cube_texture),
+	JS_CFUNC_DEF("drawSphere", 3, rl_draw_sphere),
+	JS_CFUNC_DEF("drawSphereEx", 5, rl_draw_sphere_ex),
+	JS_CFUNC_DEF("drawSphereWires", 5, rl_draw_sphere_wires),
+	JS_CFUNC_DEF("drawCylinder", 6, rl_draw_cylinder),
+	JS_CFUNC_DEF("drawCylinderWires", 6, rl_draw_cylinder_wires),
+	JS_CFUNC_DEF("drawPlane", 3, rl_draw_plane),
+	JS_CFUNC_DEF("drawRay", 2, rl_draw_ray),
+	JS_CFUNC_DEF("drawGrid", 2, rl_draw_grid),
+	JS_CFUNC_DEF("drawGizmo", 1, rl_draw_ray),
 
 	#pragma endregion
 	#pragma region Model loading/unloading functions

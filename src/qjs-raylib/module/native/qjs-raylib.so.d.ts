@@ -2,6 +2,7 @@ export * from './core';
 export * from './shapes';
 export * from './text';
 export * from './textures';
+export * from './models';
 
 type pointer = number;
 
