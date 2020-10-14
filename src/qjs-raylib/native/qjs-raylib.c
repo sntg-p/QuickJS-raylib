@@ -3244,7 +3244,7 @@ static JSValue rl_draw_grid(JSContext* ctx, JSValueConst this_val, int argc, JSV
 	return JS_UNDEFINED;
 }
 
-static JSValue rl_draw_ray(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
+static JSValue rl_draw_gizmo(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv)
 {
 	Vector3* position = (Vector3*)JS_GetOpaque2(ctx, argv[0], js_rl_vector3_class_id);
 
@@ -3587,7 +3587,7 @@ static const JSCFunctionListEntry js_rl_funcs[] = {
 	JS_CFUNC_DEF("drawPlane", 3, rl_draw_plane),
 	JS_CFUNC_DEF("drawRay", 2, rl_draw_ray),
 	JS_CFUNC_DEF("drawGrid", 2, rl_draw_grid),
-	JS_CFUNC_DEF("drawGizmo", 1, rl_draw_ray),
+	JS_CFUNC_DEF("drawGizmo", 1, rl_draw_gizmo),
 
 	#pragma endregion
 	#pragma region Model loading/unloading functions
