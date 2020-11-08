@@ -20,6 +20,7 @@
 		- [x] Text misc. functions
 		- [ ] Text strings management functions
 	- [ ] Models module
+		- [x] Working on it!
 	- [ ] Shaders module
 	- [ ] Audio module
 	- [ ] Structs
